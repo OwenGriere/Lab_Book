@@ -1,0 +1,1225 @@
+%========================
+% Rapport de stage
+%========================
+\documentclass[10pt,a4paper]{report}
+
+% =============== Encodage & langue ===============
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage{multicol}
+\usepackage{float} 
+
+% =============== Mise en page ===============
+\usepackage[a4paper,margin=1.5cm, bottom=2.2cm]{geometry}
+\usepackage{setspace}
+\setlength{\headheight}{15pt}
+\setlength{\footskip}{12mm}  
+\onehalfspacing
+
+% =============== Images & couleurs ===============
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amsmath,amssymb,amsfonts}
+
+\usepackage{tikz}
+\DeclareRobustCommand{\legenddot}[2][3pt]{%
+  \tikz[baseline=-0.6ex]{\draw[draw=black,fill=#2] (0,0) circle (#1);}%
+}
+% =============== En-têtes / pieds de page ===============
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\lhead{} \chead{} \rhead{}          
+\cfoot{\thepage}
+
+% =============== Liens cliquables & signets PDF ===============
+\usepackage{hyperref}
+\hypersetup{
+  pdfauthor   = {Owen GRIERE},
+  pdftitle    = {Rapport de Stage - CRCT - 2025},
+  pdfsubject  = {Rapport de Stage},
+  pdfcreator  = {LaTeX},
+  colorlinks  = true,
+  linkcolor   = teal,
+  urlcolor    = teal,
+  citecolor   = teal
+}
+\usepackage{bookmark}
+\usepackage{wrapfig}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{etoolbox} 
+\usepackage{caption, subcaption}
+\captionsetup{font={scriptsize,it}}
+
+%=============== Bibliographie ===============
+
+\makeatletter
+\newcommand{\tocnopage}[2]{%
+  \@ifpackageloaded{hyperref}{%
+    \addtocontents{toc}{\protect\contentsline{#1}{#2}{}{}}
+  }{%
+    \addtocontents{toc}{\protect\contentsline{#1}{#2}{}}
+  }%
+}
+\usepackage[section]{placeins}
+\usepackage{titlesec}
+\usepackage[backend=biber,style=numeric]{biblatex}
+\addbibresource{references/references.bib}
+
+%=============== Glossaire ===============
+
+\usepackage[acronym]{glossaries}
+\makeglossaries
+\setacronymstyle{long-short}
+
+\newglossaryentry{mif}{name=mIF, description={multiplex immunofluorescence}}
+\newglossaryentry{imc}{name=IMC, description={imaging mass cytometry}}
+\newglossaryentry{tls}{name=TLS, description={Structures lymphoïdes tertiaires}}
+\newglossaryentry{caf}{name=CAF, description={Fibroblastes associés au cancer}}
+\newglossaryentry{emt}{name=EMT, description={transition épithélio-mésenchymateuse}}
+\newglossaryentry{ecm}{name=ECM, description={Matrice extracellulaire}}
+\newglossaryentry{pdac}{name=PDAC, description={Adenocarcinome Canalaire du Pancréas}}
+\newglossaryentry{tme}{name=TME, description={micro-environnement tumoral}}
+\newglossaryentry{abm}{name=ABM, description={Agent-based model}}
+\newglossaryentry{mrf}{name=MRF, description={Markovian Random Field}}
+\newglossaryentry{chaos thermique}{name=chaos thermique, description={Le chaos thermique désigne l’ensemble des fluctuations aléatoires au sein d'un système}}
+\newglossaryentry{bulk}{name=bulk, description={Technique de séquençage ARN d'un ensemble large de cellule}}
+\newglossaryentry{scrna-seq}{name=scRNA-seq, description={Technique de séquençage ARN à la cellule unique mais avec peu de marqueurs}}
+
+%=============== Format des titres ===============
+
+\makeatother
+\setlist{nosep}
+
+\titleformat{\chapter}{\normalfont\huge\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{-10pt}{20pt}
+
+\titleformat{\section}[block]{\Large\bfseries}{\thesection}{0.8em}{}      
+\titlespacing*{\section}{0pt}{2ex plus .2ex}{1ex plus .1ex}               
+
+\titleformat{\subsection}[block]{\large\bfseries}{\thesubsection}{0.8em}{} 
+\titlespacing*{\subsection}{0pt}{1.5ex plus .2ex}{0.7ex plus .1ex}
+
+
+%=======================================
+%============ Page de garde ============
+%=======================================
+\begin{document}
+\pagenumbering{gobble}
+
+\begin{titlepage}
+  \parbox{\textwidth}{%
+    \centering
+    \vspace*{-0.2cm}
+    \hspace*{-2cm}
+    \noindent
+    \setlength{\tabcolsep}{0pt}
+    \renewcommand{\arraystretch}{0}
+    \begin{tabular}{ccccccc}
+      \includegraphics[height=18mm,keepaspectratio]{logo_EIDD.pdf} &
+      \includegraphics[height=18mm,keepaspectratio]{logo_univ.jpeg} &
+      \includegraphics[height=18mm,keepaspectratio]{logo_janssen.png} &
+      \includegraphics[height=18mm,keepaspectratio]{ligue_cancer.jpg} &
+      \includegraphics[height=18mm,keepaspectratio]{logo_cnrs.jpg} &
+      \includegraphics[height=18mm,keepaspectratio]{logo_inserm.png} &
+      \includegraphics[height=18mm,keepaspectratio]{LOGO_CRCT.png}
+    \end{tabular}
+    \vspace{4cm}
+  }%
+
+%=======================================
+%============ Titre Principal ==========
+%=======================================
+
+  \centering
+  {\Large \textsc{Rapport de Stage}}\\[6mm]
+  {\huge \bfseries Utilisation de la modélisation PhysiCell et des données spatiales provenant de patients pour analyser et 
+  simuler le micro-environnement tumoral de l'adénocarcinome canalaire du pancréas}\\[4mm]
+
+  \vspace{10mm}
+  \begin{tabular}{>{\bfseries}rl}
+    Étudiant : & Owen GRIERE\\
+    Formation : & Génie Bio-informatique à l'EIDD \\
+    Tuteur académique : & Anne VANET \\
+    Maître de stage : & Vera PANCALDI \\
+    Période : & du 10/02/2025 au 08/08/2025 \\
+    Lieu : & CRCT, Toulouse \\
+  \end{tabular}
+
+  \vfill
+  \vspace{8mm}
+  \rule{\textwidth}{0.4pt}
+  \vspace{2mm}
+\end{titlepage}
+
+%========================
+%==== Remerciements =====
+%========================
+\begin{titlepage}
+  \parbox{\textwidth}{%
+    \centering
+    \vspace*{-0.2cm}
+    \hspace*{-2cm}
+    \noindent
+    \setlength{\tabcolsep}{0pt}
+    \renewcommand{\arraystretch}{0}
+    \begin{tabular}{ccccccc}
+      \includegraphics[height=18mm,keepaspectratio]{logo_EIDD.pdf} &
+      \includegraphics[height=18mm,keepaspectratio]{logo_univ.jpeg} &
+      \includegraphics[height=18mm,keepaspectratio]{logo_janssen.png} &
+      \includegraphics[height=18mm,keepaspectratio]{ligue_cancer.jpg} &
+      \includegraphics[height=18mm,keepaspectratio]{logo_cnrs.jpg} &
+      \includegraphics[height=18mm,keepaspectratio]{logo_inserm.png} &
+      \includegraphics[height=18mm,keepaspectratio]{LOGO_CRCT.png}
+    \end{tabular}
+    \vspace{1cm}
+  }%
+
+  %========================
+  %==== Remerciements =====
+  %========================
+  \begin{center}
+    {\Large \textbf{Remerciements}}
+  \end{center}
+
+  \noindent Je remercie en premier lieu Vera PANCALDI et l'équipe 21 du CRCT pour m'avoir accueilli chaleureusement au sein de leur effectif. 
+  J'ai eu l'occasion d'échanger avec chacun des membres de cette équipe, aussi bien pour des projets scientifiques que pour des projets personnels et professionnels. 
+  Grâce au suivi indéfectible de Vera ainsi qu'à la bienveillance de tout le monde, j'ai pu doucement, mais sûrement m'intégrer à l'équipe.
+
+  \medskip
+  \noindent De plus, plusieurs de mes collègues, dont Vera, sont des femmes et des hommes de sciences qui m'ont conforté dans mon choix professionnel et personnel. 
+  Grâce à la dynamique sérieuse, mais décontractée qui règne dans l'équipe 21 du CRCT, j'ai pu me projeter dans le quotidien d'un chercheur.
+
+  \medskip
+  \noindent J'aimerais aussi remercier l'EIDD et, tout particulièrement, les professeurs qui m'ont proposé des cours d'une grande qualité malgré le peu d'élèves 
+  que nous étions dans les salles de classe. La filière bio-informatique a, selon moi, un très bon avenir, avec comme professeure principale Anne VANET, 
+  qui a déjà su faire évoluer cette filière dans le bon sens.
+
+  \medskip
+  \noindent Enfin, je remercie ma famille qui m'a poussé à aller jusqu'au bout de ces études laborieuses, mais toujours passionnantes.
+
+  \vspace{6mm}
+  \rule{\textwidth}{0.4pt}
+  \vspace{3mm}
+
+  %========================
+  %======== Résumé ========
+  %========================
+  \begin{center}
+    {\Large \textbf{Résumé}}
+  \end{center}
+
+  \noindent
+  \begin{multicols}{2}
+  Le cancer du pancréas est aujourd'hui l'une des principales causes de décès par cancer malgré son faible taux d'incidence. 
+  Sa spécificité tissulaire induit une inefficacité quasi totale des traitements classiques par chimiothérapies et immunothérapies ; 
+  même la chirurgie ne garantit pas la survie et n'est que rarement possible. 
+  Ce projet propose une approche intégrée pour analyser et simuler le micro-environnement tumoral (\gls{tme}) du \gls{pdac}, en combinant modélisation multi-agents (PhysiCell) 
+  et analyses spatiales de données patients (\gls{mif}/\gls{imc}). Côté simulation, un modèle \gls{abm} paramétrable décrit l’évolution conjointe de populations cellulaires 
+  diffusant  afin d’explorer la progression tumorale, l’immunosuppression et la transition épithélio-mésenchymateuse (\gls{emt}) dans des contextes proches des tissus réels. L'\gls{emt} correspond à la différenciation des cellules cancéreuses épithéliales en mésenchymateuses.
+  Côté analyse, les images \gls{mif}/\gls{imc} sont converties en réseaux cellulaires spatiaux (Tysserand), puis caractérisées par des métriques d’assortativité et par la détection 
+  de niches locales (MOSNA/NAS), avec le développement d’une interface graphique facilitant l’usage de ces outils au laboratoire. 
+  Enfin, un pipeline de génération de réseaux synthétiques est esquissé : il s’appuie sur une longueur de corrélation estimée dans les données et sur une matrice 
+  d’assortativité cellule–cellule pour contraindre un modèle de type Potts (avec échantillonnage de Gibbs) et produire des tissus artificiels statistiquement cohérents 
+  avec l’observé. Malgré des résultats encourageants sur la modélisation ainsi que des mesures d'assortativité et des détections de niches précises, 
+  la génération de tissus synthétiques n’a, quant à elle, pas encore abouti. Ce projet a permis de récolter des informations intéressantes sur le TME du \gls{pdac} 
+  et nécessitera plus de temps et de données pour achever l’étude.
+  \end{multicols}
+
+  \vfill
+  \rule{\textwidth}{0.4pt}
+\end{titlepage}
+
+
+%========================
+%== Sommaire cliquable ==
+%========================
+\cleardoublepage
+\pdfbookmark[section]{Sommaire}{toc} % crée un signet "Sommaire"
+\tableofcontents
+
+%========================
+%=== Corps du rapport ===
+%========================
+\cleardoublepage
+\pagenumbering{arabic}
+\setcounter{figure}{1}
+\setcounter{page}{1}
+\pretolerance=10000
+\tolerance=2000
+\emergencystretch=20pt
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+
+\chapter{Contexte du stage}
+
+\section{Présentation du CRCT et de l'équipe NetB(IO)²}
+
+L’équipe 21 du CRCT, NetB(IO)² (Network Biology for Immuno-Oncology), dirigée par Vera Pancaldi, étudie le micro-environnement tumoral (\gls{tme}) et les interactions entre la 
+tumeur et le système immunitaire afin d’expliquer l’hétérogénéité entre les patients et la résistance aux immunothérapies. Elle combine approches multi-omiques 
+single-cell, transcriptomique spatiale, imagerie, IA et modélisation mathématique et la théorie des réseaux pour cartographier les interactions cellule-cellule et proposer des 
+stratégies de reprogrammation du TME, avec un intérêt marqué pour les macrophages associés aux tumeurs (TAM) comme acteurs clés du paysage immunitaire.
+
+\noindent \\ Des travaux méthodologiques et appliqués incluent la modélisation logique et à agents des macrophages et le développement d’outils pour extraire des réseaux spatiaux à partir d’images tissulaires (par exemple : Tysserand et MOSNA), ainsi que l’usage de la théorie des réseaux jusqu’à la structure 3D de la chromatine pour relier signaux moléculaires, états cellulaires et phénotypes tissulaires. L’équipe s’inscrit au sein de l’UMR 1037-CRCT (Oncopole, Toulouse) et vise à mettre en lumière des signatures prédictives et des cibles de contrôle du \gls{tme}.
+
+\section{Déroulé du stage}
+
+Ce stage m’a conduit à travailler sur plusieurs projets distincts, aux objectifs variés. Mon propre projet a été financé
+par Janssen et concerne l'adénocarcinome canalaire pancréatique. J'ai dû utiliser en grande partie deux softwares MOSNA et PhysiCell, le premier permet d'exécuter 
+des calculs statistiques sur des réseaux cellulaires et le second est un outil de conception de modèles multi-agents. Mon objectif était de dégager de nouvelles 
+informations sur le \gls{tme} du cancer du pancréas et de les intégrer au modèle de cancer du pancréas entièrement conçu lors de ce stage afin d'avoir un outil de visualisation du \gls{tme} en présence ou non d'une thérapie pour des patients spécifiques. Le caractère adaptable de la modélisation suivant les patients pourrait 
+permettre d'étudier les traitements classiques pour comprendre leur fonctionnement sur le cancer du pancréas et de potentiellement, à long terme, se servir de la modélisation pour dégager un traitement fonctionnel et adapté à chaque patient.
+
+\noindent \\ Ainsi, ce stage s'est déroulé en plusieurs étapes bien scindées qui seront marquées dans le plan de ce rapport. Premièrement, j'ai passé un mois à me familiariser avec le laboratoire
+en m'informant sur la méthodologie de travail, sur les projets de mes collègues et sur mon propre projet en commençant mes lectures d'anciens rapports et de publications.
+Ensuite, j'ai conçu jusqu'en avril une modélisation d'un adénocarcinome canalaire du pancréas à l'aide de PhysiCell. J'ai par la suite, jusqu'en juin, développé le 
+pipeline qui servira à générer des réseaux tissulaires à partir de données de protéomique spatiale et d'en extraire des statistiques. 
+J'ai eu aussi la chance de soumettre une proposition de thèse avec Vera PANCALDI, cela m'a demandé beaucoup d'implication, car le sujet ne m'était pas familier. Cette candidature qui s'est malheureusement soldée par un échec m'aura tout de même occupé tout le mois de juin. Finalement, j'ai achevé mon stage en explorant la génération de réseaux synthétiques.
+
+%===========================================
+%=============== CHAPTER 1 =================
+%===========================================
+
+\chapter{Contexte de la pathologie étudié}
+
+\section{L'adénocarcinome canalaire pancréatique (PDAC)}
+Le cancer du pancréas est l’une des tumeurs les plus redoutées en oncologie, tant par son agressivité que par la difficulté de son diagnostic précoce. 
+Malgré un taux d'incidence relativement faible (autour de 2\% des cas de cancer en France)\parencite{noauthor_cancers_2023}, il est la 4ème cause de mortalité par 
+cancer dans le monde et pourrait devenir d'ici à 2030 le 2ème cancer le plus mortel. Cette gravité s’explique par plusieurs facteurs, notamment la localisation 
+profonde du pancréas, qui rend la détection précoce difficile, et la nature silencieuse de la maladie à ses débuts. Dans la majorité des cas, le diagnostic est posé à
+un stade avancé, lorsque la tumeur a déjà envahi les structures voisines ou à donner naissance à des métastases. L’adénocarcinome canalaire pancréatique représente 
+plus de 90\% des cas, et il se développe à partir des cellules épithéliales tapissant les canaux pancréatiques. 
+De plus, Le pronostic de la pathologie est sombre : la survie globale à cinq ans est inférieure à 10 \%, et seule une minorité de patients est éligible à 
+une chirurgie potentiellement curative.
+
+\section{Le micro-environnement Tumoral (TME)}
+
+Tout d'abord, le cancer est une maladie caractérisée par la prolifération incontrôlée de cellules anormales capables d’envahir les tissus voisins en formant des 
+métastases. Il résulte généralement d’accumulations de mutations génétiques sur des gènes spécifiques appelés oncogènes perturbant les mécanismes de régulation 
+cellulaire. Parmi les traitements, la chimiothérapie repose sur l’administration de molécules cytotoxiques visant à détruire ou bloquer la division des cellules 
+cancéreuses. L’immunothérapie, plus récente, stimule ou module le système immunitaire pour qu’il reconnaisse et élimine les cellules tumorales, par exemple grâce 
+aux inhibiteurs de points de contrôle immunitaire.
+Ensuite, le micro-environnement tumoral désigne l’ensemble des éléments qui entourent une tumeur et qui interagissent avec les cellules cancéreuses. Il ne se limite 
+pas aux cellules malignes elles-mêmes : c’est un écosystème complexe, dynamique et hétérogène qui participe directement à la progression du cancer.
+Dans certains cancers, le \gls{tme} se présente sous la forme d’une fibrose dense qui entoure la tumeur et limite l’efficacité des traitements. Cette fibrose apparaît notamment à cause de 
+l'accumulation de l'\gls{ecm}. 
+En effet, le stroma particulièrement dense du \gls{pdac} pouvant provoquer un écrasement des vaisseaux sanguins empêche les molécules de chimiothérapies et les 
+cellules immunitaires d'accéder au cancer. Le contexte immunosuppressif du \gls{pdac} favorise la progression incontrôlée de la tumeur.
+La recherche actuelle explore de nouvelles pistes, telles que les thérapies ciblées adaptées aux profils moléculaires des tumeurs et le développement de modèles 
+précliniques personnalisés, dans l’espoir d’améliorer un pronostic qui demeure aujourd’hui l’un des plus défavorables en cancérologie.
+\noindent Afin d'étudier le micro-environnement tumoral nous pouvons utiliser les techniques de \gls{bulk} ou de \gls{scrna-seq}. le \gls{bulk} est un séquençage 
+ARN extrait d’un mélange de nombreuses cellules donnant une expression moyenne globale, sans distinction cellulaire, qui va donner une définition cellulaire moyenne 
+du \gls{tme}. Alors que, le \gls{scrna-seq} est un séquençage ARN à l’échelle de la cellule unique, permettant de révéler l’hétérogénéité cellulaire et d’identifier 
+différents types ou états cellulaires.
+De plus, \textcite{johnson_human_2025} montre qu'il est possible d'utiliser une méthode de modélisation en particulier afin d'explorer le \gls{tme}, et c'est notamment cette méthode que 
+nous allons utiliser par la suite.
+
+Ainsi, le contexte de ce projet de recherche s'inscrit dans la compréhension du \gls{tme} du \gls{pdac}. 
+En effet, analyser la conformation d'un tissu peut permettre de mettre en exergue certains processus biologiques majeurs intervenants dans la progression du cancer, 
+dans son caractère immunosuppressif. Cette connaissance ainsi acquise peut permettre la conception de modèles physico/biologiques qui simulent la progression 
+d'un \gls{pdac} pour une conformation initiale spécifique pouvant provenir directement d'un unique individu.
+
+\chapter{Modélisation de la progression d'un PDAC}
+
+La modélisation multi-agents est une approche de modélisation qui représente un système comme un ensemble d’agents autonomes capables de prendre des décisions 
+selon des règles simples et d’interagir entre eux. Ces interactions répétées peuvent générer des comportements collectifs complexes et parfois contre-intuitifs, 
+appelés phénomènes émergents, impossibles à réduire aux seules propriétés individuelles. L’intérêt majeur de l’\gls{abm} est précisément de capturer ces phénomènes, en 
+offrant une description naturelle et flexible des systèmes. Pour des questions biologiques, cette méthode est particulièrement adaptée lorsque le comportement 
+cellulaire ou tissulaire est hétérogène, non linéaire, dépend du passé ou de l’environnement, et lorsque les interactions locales entre unités 
+(cellules, molécules, micro-environnements) peuvent conduire à des dynamiques globales imprévisibles. De plus, l'\gls{abm} offre un cadre puissant pour simuler des 
+systèmes biologiques complexes composés de nombreuses entités en interaction où l'on représente les biomolécules comme des agents 
+autonomes.\parencite{riggi_agent-based_2025}
+
+\section{Introduction à PhysiCell}
+
+Afin de modéliser la progression des cellules épithéliales et mésenchymateuses dans le cancer du pancréas, on utilise un \gls{abm}, 
+on choisit PhysiCell\parencite{ghaffarizadeh_physicell_2018} notamment, car c'est un outil qui a été souvent étudié dans l'équipe, est spécifique à la 
+modélisation de micro-environnement biologique, est disponible en open-source et qui est suffisamment adaptable pour être utilisé dans de nombreux cas de figures.
+PhysiCell est un logiciel de simulation dynamique développé en C++ où chaque agent possède des caractéristiques intrinsèques spécifiques de la biologie cellulaire 
+comme l'apoptose et la division cellulaire. Il définit aussi des règles d’interaction entre agents, et permet d’ajouter des substrats comme l'oxygène ou un 
+signal protéique essentiel dans un processus biologique que l'on souhaite mettre en lumière dans notre modèle.
+Ainsi PhysiCell va exécuter une simulation d'un modèle biologique en utilisant des règles de diffusion de substrats et de force d'interactions physique entre agents 
+qui sont communs à toutes les simulations, le reste étant entièrement paramétrable par l'utilisateur. Ce même paramétrage constitue le défi le plus important de la 
+modélisation à travers PhysiCell.
+
+\subsection{Les Agents}
+
+Les agents dans PhysiCell sont les cellules d'un modèle in-silico simulant un tissu biologique pouvant être celui d'un \gls{pdac}. 
+Nous pouvons alors définir des types cellulaires grâce au paramétrage des caractéristiques intrinsèques des agents.
+Nous pouvons ainsi décrire le comportement d'un type cellulaire par :
+\begin{itemize}[label=o]
+  \item Les paramètres de chaque agent : 
+  \begin{itemize}[label=--]
+    \item la motilité (peut être chimiotaxique)
+    \item la division cellulaire
+    \item la croissance
+    \item l'apoptose
+    \item la nécrose
+    \item la sécrétion/consommation des différents substrats
+  \end{itemize}
+
+
+  \item les paramètres d'interaction entre les agents :
+  \begin{itemize}[label=--]
+    \item les forces adhésives et répulsives par rapport aux autres types d'agents
+    \item la phagocytose ou la destruction des autres agents
+    \item la fusion
+  \end{itemize}
+\end{itemize}
+
+\noindent Les agents sont alors soumis à des règles physiques décrites dans PhysiCell, ainsi, il y a autant de dynamiques cellulaires que de combinaisons paramétriques. 
+Trouver le bon paramétrage représente alors un défi dans la conception de notre modèle.
+
+\subsection{Les substrats}
+
+Les substrats font parties du micro-environnement du modèle et agissent comme un fluide qui se diffuse à travers l'espace en deux ou trois dimensions de la  modélisation. Chacun des 
+substrats sont définis séparément, ils répondent aux mêmes lois physiques de diffusion, mais ces lois étant également paramétriques, les substrats
+peuvent alors avoir des dynamiques de diffusion différentes. Les substrats peuvent représenter un environnement moléculaire comme l'oxygène, mais aussi 
+des environnements protéiques pouvant modéliser des voies de signalisations en plus des communications intercellulaires ou des échanges des cytokines.
+
+\begin{wrapfigure}[12]{r}{0.40\textwidth}
+  \centering
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth]{ECM.png}
+    \caption{Remodelage de la matrice extracellulaire par les fibroblastes (\gls{caf}), les \gls{caf} sécrète l'\gls{ecm} et celle-ci ne se diffuse pas.}
+    \label{fig:ecm}
+  \end{subfigure}\hfill
+  \begin{subfigure}{0.48\linewidth}
+    \includegraphics[width=\linewidth]{Cytokine13.png}
+    \caption{Diffusion des cytokines pro-inflammatoires (anti-tumoraux) sécrétés en grande partie par les macrophages de type M1}
+    \label{fig:cytokines}
+  \end{subfigure}
+  \caption{Images montrant deux types de substrats différents du modèle}
+  \label{fig:substrats}
+\end{wrapfigure}
+
+\noindent Les paramètres de diffusion sont les suivants :
+\begin{itemize}[label=--]
+  \item coefficient de diffusion (µm$^2$/min)
+  \item Decay rate               (1/min)
+  \item condition de Dirichlet   (mmHg)
+\end{itemize}
+
+\par\noindent Les substrats peuvent alors influencer le comportement des agents et rendre le \gls{tme} plus réaliste en ajoutant un environnement riche en 
+certaines protéines ou molécules. Ces substrats vont alors jouer un rôle dans divers mécanismes biologiques révélateurs d’un comportement global d'un tissu.
+
+\par\noindent Les substrats se superposent alors sur le même modèle et les agents peuvent également modifier la diffusion de ces substrats
+par leur capacité à consommer ou sécréter eux même les substrats.
+
+\subsection{Les règles d'interaction}
+
+Les règles d'interactions sont un paramétrage supplémentaire de PhysiCell permettant de décrire des dynamiques entre un agent et un autre objet du modèle PhysiCell
+comme un autre agent, un substrat ou même une contrainte physique (la pression par exemple). Une fois que les deux objets interagissant ensemble 
+sont définis, on peut alors sélectionner une conséquence s'appliquant au premier agent. Les conséquences peuvent élever ou diminuer les paramètres intrinsèques de l'agent 
+comme l'apoptose ou la division cellulaire.
+
+\begin{wrapfigure}{l}{0.4\textwidth}
+  \centering
+  \includegraphics[width=0.40\textwidth]{Hill.png}
+  \caption{Fonctions de Hill qui modélisent les interactions entre un agent et un autre objet de PhysiCell. Il est représenté sur cette image 
+  3 courbes de Hill avec des hyperparamètres différents, mais avec des valeurs de saturations égales à 1 afin de se concentrer sur 
+  l'impact du coefficient de Hill et du halfmax sur la forme de ces réponses de Hill}
+  \label{fig:Hill}
+\end{wrapfigure}
+
+
+Afin de générer une règle d'interaction, on va ensuite paramétrer une fonction de Hill, étant dans notre cas une réponse de Hill, car elle va décrire le 
+changement d'une caractéristique intrinsèque de l'agent en fonction de la concentration d'un signal d'entrée.
+La réponse de Hill est définie par une sigmoïde dans laquelle on peut modifier la valeur de saturation, le halfmax (décrivant la concentration nécessaire 
+pour atteindre une réponse correspondante à la moitié de la valeur de saturation) et le coefficient de Hill décrivant la pente de la sigmoïde.
+\[
+H(s, S_{saturation}, S_{\text{half-max}}, h) = S_{saturation}\cdot\frac{s^h}{{S_{\text{half-max}}}^h + s^h}
+\]
+\noindent Où \(S_{saturation}\),  \(S_{\text{half-max}}\) et \(h\) sont des hyperparamètres de la réponse de Hill.\\ \\
+On peut alors changer la dynamique d'une réponse à une interaction en modifiant ces paramètres. Par exemple, on peut définir une règle disant
+que les cellules cancéreuses ne se divisent plus si la pression est trop importante.
+Pour cela, on sélectionne les cellules cancéreuses comme agent, comme signal d'entrée nous choisissons la pression et comme conséquence un impact 
+sur le cycle de division cellulaire. Comme vu dans la Figure~\ref{fig:Hill} si l'on choisit une réponse de Hill de la même forme que la fonction bleue, on va observer
+une diminution de la division cellulaire là où la pression augmente. Si l'on prend plutôt une réponse de Hill qui suit la fonction orange, alors la division cellulaire
+va augmenter avec la pression et d'autant plus si l'on prend une réponse de Hill suivant la fonction rouge.
+
+\section{Modélisation PhysiCell d'un tissu de PDAC}
+
+L'objectif de cette modélisation est de comprendre davantage certain processus biologique, d'en comprendre les causes et les conséquences et s'il y a des différences 
+en fonction de l'organisation spatiale du \gls{tme}. Aussi, après avoir été validé par des biologistes et par des vidéos de tranches épaisses provenant de biopsies, 
+elle peut servir à prédire la dynamique d'un traitement spécifique sur le \gls{tme}. 
+L'intérêt de PhysiCell est que l'on peut générer des positions cellulaires à l'état initial
+correspondant a des résultats de microscopies spatiales comme des images VISIUM par exemple. Ainsi, il est possible de générer un modèle qui va pouvoir simuler la
+dynamique d'un \gls{tme} de cancer du pancréas pour des patients spécifiques et donc proposer un traitement adapté à chaque patient.
+
+\subsection{Les composants du modèle}
+
+Premièrement, le modèle de \gls{pdac} est censé simuler plusieurs processus biologiques que voici :
+
+\begin{itemize}[label=--]
+  \item l'hypoxie
+  \item la transition épithélio-mésenchymateuse (\gls{emt})
+  \item la réponse immunitaire
+  \item l'immunosuppression
+\end{itemize} 
+
+\noindent Afin de modéliser ces mécanismes biologiques, nous nous sommes penchés sur cette publication \textcite{johnson_human_2025} qui propose différents 
+modèles dont deux en particulier que nous souhaitons fusionner. Le premier est un modèle de progression des cellules épithéliales et mésenchymateuses à travers un 
+tissu
+de cancer de pancréas. Le second modèle simule la réponse immunitaire dans un environnement cancéreux. La fusion des deux modèles nécessite un bon équilibre des 
+hyperparamètres ainsi qu'une conservation des processus biologiques de chacun des modèles, mais sur une même échelle.
+Tout d'abord, nous devions générer les agents qui seront les différents types cellulaires. Pour cela, nous choisissons les mêmes types cellulaires que dans le premier 
+exemple cité précédemment. En effet, celui-ci a la particularité d'avoir comme condition initiale une image VISIUM provenant d'un patient, ainsi en utilisant 
+la même méthode, nous pourrions adapter notre modèle à nos propres données spatiales.
+L'image VISIUM est une technologie de transcriptomique spatiale qui associe une image histologique (souvent H\&E) à la mesure de l’expression des gènes directement 
+dans le tissu, tout en conservant la localisation spatiale des cellules.
+Ainsi, même si le phénotypage devra surement être modifié dans le cadre d'une étude approfondie sur un modèle de cancer du pancréas plus avancé, 
+on utilisera les types cellulaires suivants pour notre modèle :
+
+\begin{itemize}[label=--]
+  \begin{multicols}{2}
+  \item fibroblastes (\gls{caf})
+  \item cellules cancéreuses épithéliales
+  \item cellules cancéreuses mésenchymateuses
+  \item M1 macrophage
+  \item M2 macrophage
+  \item T cell naïve
+  \item CD8 T cell
+  \item T cell inhibée
+  \end{multicols}
+\end{itemize} 
+
+\noindent Nous avons choisit ces types cellulaires car ils étaient déjà présents dans les données VISIUM de \textcite{johnson_human_2025} et qu'ils étaient suffisants pour représenter correctement les processus biologiques que nous souhaitions simuler.
+
+\noindent Ensuite, il est nécessaire de définir des substrats pour enrichir notre modèle.
+
+\begin{itemize}[label=--]
+  \item TGF-$\beta$
+  \item oxygène
+  \item Cytokines pro-inflammatoires
+  \item Cytokines pro-tumorales
+  \item ECM
+\end{itemize}
+
+\subsection{Les interactions présentes dans la modélisation}
+
+Les \textbf{\gls{caf}} sont les cellules principales du \gls{tme} dans le cancer du pancréas et sont alors considérés comme des \gls{caf} 
+associé au cancer (\gls{caf}), les \gls{caf} sont peu voire pas mobiles et se divisent lentement. Le rôle des \gls{caf} dans le cadre de ce modèle est de remodeler 
+la matrice extracellulaire à travers le tissu. La matrice extracellulaire (\gls{ecm}) est une sécrétion de macromolécules telles que le collagène qui emplie l'espace intercellulaire 
+et structure cet espace en tissu. Dans le cancer du pancréas, la sécrétion accélérée de l'\gls{ecm} par les \gls{caf} constitue la principale cause 
+de la forte densité du stroma.\\ Aussi, les \gls{caf} associés au cancer secrètent le TGF-$\beta$ qui participe au caractère immunosuppressif du tissu, augmente 
+la polarisation des cellules macrophages M1 en macrophages M2 ainsi que la différenciation des cellules épithéliales en mésenchymateuses 
+(\gls{emt}). De plus, l'\gls{ecm} diminue la vitesse de migration des cellules immunitaires en agissant comme un maillage 
+élastique qui retient les cellules dans leur migration à l'instar d'une force de frottement fluide. 
+La totalité de ces règles viennent des différentes modélisations de \textcite{johnson_human_2025}, il me restera alors à réaliser le paramétrage. \\ 
+
+\noindent Les \textbf{cellules cancéreuses épithéliales} sont le foyer du cancer du pancréas, ce sont des cellules exocrines appelées cellules canalaires qui sont 
+présentes sur la paroi interne des canaux pancréatiques. Elles se divisent rapidement, sont peu mobiles et constitue la majeure partie de l'environnement cancéreux 
+du \gls{tme}. \\
+
+\noindent Les \textbf{cellules cancéreuses mésenchymateuses} font partie du processus de transition épithélio-mésenchymateuses. Les cellules mésenchymateuses ont 
+une légère vitesse de division cellulaire et une grande motilité. Les cellules mésenchymateuses suivent la matrice extra cellulaire. Une fois la migration terminée, elles peuvent redevenir des cellules épithéliales et créer un nouveau foyer cancéreux en récupérant sa capacité d'adhésion cellule-cellule. Ce processus est en réalité le coeur des métastases à travers le corps humain, mais nous savons aussi qu'il est possible d'observer ces migrations à l'échelle locale. \\
+
+\noindent Les macrophages sont des cellules immunitaires capables de phagocyter et détruire des agents pathogènes tout en alertant le système immunitaire.
+Les lymphocytes T reconnaissent spécifiquement des antigènes présentés par d’autres cellules et déclenchent une réponse ciblée. Ensemble, ils assurent la 
+défense de l’organisme contre les infections et participent à la régulation de l’immunité.
+
+\noindent Les \textbf{macrophages M1 et M2} sont des acteurs important de la réponse immunitaire et du caractère immunosuppressif du \gls{tme}. Les 
+macrophages M1 sécrètent des cytokines pro-inflammatoire qui vont servir de signalisation pour la réponse immunitaire tandis que les macrophages M2 sécrètent quant à 
+eux des cytokines pro-tumorales qui vont générer l'immunosuppression des cellules immunitaires. Les cytokines sont un ensemble hétérogène de protéines ou autres 
+macromolécules servant de signaux dans des interactions inter-cellulaires. Les cytokines pro-inflammatoires peuvent être notamment des IFN-$\gamma$ ou TFN-$\alpha$ tandis
+que les cytokines pro-tumorales peuvent être des IL-10. Sachant que le TGF-$\beta$ est aussi une cytokine pro-tumorale que nous conservons séparé des autres cytokines 
+car il joue un rôle primordial dans la polarisation des macrophages M1 en macrophages M2. Aussi, selon \textcite{johnson_human_2025}, les macrophages M1 peuvent se 
+polariser en macrophages M2 par hypoxie. Donc, les macrophages M2 semblent être la principale cible à abattre dans le cadre du \gls{pdac}.
+En effet, il est important de préciser le cadre, car dans le cancer du cerveau ce sont plutôt les macrophages M1 qui constitue un élément à risque. Les macrophages M2 ont pour objectif d'arrêter
+la réponse immunitaire qui provoque une inflammation du tissu. Dans le cancer du cerveau, les macrophages M1 vont se réunir pour perpétuer l'inflammation et causer des dommages irréparables aux cellules cérébrales qui ne supportent pas les augmentations de températures. Donc, les macrophages M2 sont une cible spécifique à certains micro-environnements tumoraux comme celui du cancer du pancréas. C'est pour cette raison que l'équipe 21 du CRCT a développé un anticorps capable de cibler spécifiquement les macrophages de type M2 dans un environnement tumoral dense et tester de nouvelles thérapies impliquant la mort des macrophages M2. \\
+
+\noindent Les \textbf{lymphocytes T} jouent le rôle de cellules tueuses pour les cellules cancéreuses. Elles vont alors traquer les cellules cancéreuses par 
+chimiotaxie en suivant les cytokines pro-inflammatoires sécrétée par les macrophages M1, eux-mêmes dirigés vers les cellules cancéreuses. Les cellules immunitaires ont, dans notre modélisation, des états naïfs, activés ou inhibés. Les cellules immunitaires sont tout d'abord des cellules naïves qui deviennent activées en étant recruté par les macrophages M1 grâce aux cytokines pro-inflammatoires. Les cytokines pro-tumorales ont la capacité d'inhiber les cellules immunitaires activées, mais aussi de limiter le recrutement des cellules immunitaires naïves. \\
+
+\subsection{Résultats de la modélisation}
+
+Les modèles n'ont pas pour but de représenter la réalité, mais de trouver une alternative entre la complexité d'un tissu biologique et notre capacité de calcul. 
+C'est pour cela que l'on s'est limité à quelques substrats en sélectionnant les voies de signalisations et les processus biologiques qui semblent les plus 
+importants dans le cadre du \gls{pdac}. 
+On peut trouver ce modèle dans ce Github (\href{https://github.com/OwenGriere/PhysiCell-model-of-PDAC-progression}{La modélisation de \gls{pdac}}) dans l'exemple n°2.
+
+\begin{wrapfigure}[13]{r}{0.30\textwidth}
+  \centering
+  \includegraphics[width=0.30\textwidth]{debut-simulation.png}
+  \caption{Etat initial de la modélisation comprenant 1582 cellules}
+  \label{fig:debut-sim}
+\end{wrapfigure}
+
+Dans PhysiCell, le coût en calcul de chacun des composants d'un modèle n'est pas le même. En effet, 
+chaque substrat ajouté à la modélisation amène à une augmentation drastique du coût de calcul à cause de l'équation différentielle de diffusion. Le modèle peut en 
+revanche comporter un nombre assez grand de différents agents.
+Avant de lancer notre simulation, il faut d'abord régler les paramètres globaux de notre modélisation que sont l'ensemble de définition, étant ici en deux 
+dimensions (PhysiCell est tout de même capable de générer des modèles 3D), les différentiels spatiaux nécessaires, car liés aux distances d'interaction, aux mouvements 
+des agents ainsi qu'à la diffusion des substrats, et les différentiels de temps ayant un impact sur la diffusion, la dynamique des cellules et le comportement 
+phénotypique de ces dernières. \\ Enfin, le temps de simulation ne représente pas le temps in-vivo ou in-vitro. Il est possible de créer une simulation dont le temps 
+d'écoulement serait égal au temps réel, mais cela nécessite un paramétrage approfondi et cela peut s'avérer contre productif, car les mécanismes du vivant peuvent 
+prendre un temps inutilement long à visualiser entièrement.
+
+\noindent Finalement, nous lançons la simulation sur 15 jours (temps de simulation). Comme état initial, nous 
+utilisons l'image VISIUM n°2 provenant d'un cancer du pancréas publié dans \textcite{johnson_human_2025} ce qui donne ce que l'on peut observer en 
+Figure~\ref{fig:debut-sim}. \\ Aussi, sur chacune des images de la modélisation, la légende sera la même : \\ 
+
+\begin{multicols}{2}
+\begin{itemize}[label=,leftmargin=1cm,itemsep=2pt]
+  \item[\legenddot{gray}]  Fibroblastes associés au cancer
+  \item[\legenddot{red}]  Cellules épithéliales cancéreuses
+  \item[\legenddot{yellow}]  Cellules mésenchymateuses cancéreuses
+  \item[\legenddot{green!60!black}]  Macrophage M1
+  \item[\legenddot{blue}]  Macrophage M2
+  \item[\legenddot{purple}]  Lymphocytes T naïfs
+  \item[\legenddot{orange}]  Lymphocytes T activés
+  \item[\legenddot{green}]  Lymphocytes T inhibés  
+\end{itemize}
+\end{multicols}
+
+\noindent \\ Grâce à PhysiCell Studio\parencite{heiland_physicell_2023}, une interface graphique développée pour PhysiCell, on peut directement observer l'avancement de la simulation.
+
+\begin{wrapfigure}[15]{l}{0.35\textwidth}
+  \centering
+  \includegraphics[width=0.35\textwidth]{ecm-2days.png}
+  \caption{La modélisation à 2 jours et 14 heures contient 1612 cellules. La matrice extracellulaire se colore en rouge plus elle est présente.}
+  \label{fig:2days}
+\end{wrapfigure}
+
+Premièrement, on visualise notre modélisation à deux jours. La Figure~\ref{fig:2days} montre que la population de cellules cancéreuses n'a pas augmenté. Ce phénomène est 
+lié à la réponse immunitaire qui est encore efficace à ce stade de l'oncogenèse. En effet, de nombreux cancers se forment constamment dans notre corps mais les cellules
+immunitaires vont tuer la quasi-totalité de ces débuts de cancer. Le cancer se développe définitivement quand la réponse immunitaire ne contient plus la progression des cellules 
+cancéreuses. A cet instant, la modélisation montre que peu de macrophages M1 se sont polarisés en macrophages M2 et que l'\gls{ecm} secrétée par les 
+\gls{caf} n'est pas en quantité suffisante pour endiguer les interactions intercellulaires. Aussi, la transition entre les cellules cancéreuses épithéliales et 
+mésenchymateuses augmente afin de créer des clusters de cellules épithéliales et des petits groupes de cellules mésenchymateuses explorant le tissu à la recherche 
+d'un endroit idéal pour s'implanter, cet endroit a été défini dans ce modèle comme étant composé de \gls{caf} et d'une \gls{ecm} en forte quantité.
+
+\begin{wrapfigure}[15]{r}{0.35\textwidth}
+  \centering
+  \includegraphics[width=0.35\textwidth]{6days.png}
+  \caption{La modélisation à 6 jours et 8 heures contient 1820 cellules. Les cytokines pro-tumorales se colorent en rouge plus elles sont présentes.}
+  \label{fig:6days}
+\end{wrapfigure}
+
+Ensuite, la Figure~\ref{fig:6days} montre un phénomène intéressant provenant de notre modélisation, les macrophages M2 polarisés semblent se placer au centre des clusters
+cancéreux afin de créer le caractère immunosuppressif du \gls{pdac}. En effet, ce processus semble être efficace, car le nombre de cellules 
+cancéreuses a bien augmenté au niveau des clusters mais a diminué ailleurs, car détruit par les cellules immunitaires. Le fonctionnement de notre modélisation présente un
+défaut dans la transition épithélio-mésenchymateuses, les cellules cancéreuses mésenchymateuses se déplacent vers l'\gls{ecm} donc vers les \gls{caf}.
+Or, les \gls{caf} sécrètent aussi le facteur TGF-$\beta$ qui est responsable de la transition des cellules épithéliales vers les cellules mésenchymateuses,
+donc les cellules au centre des clusters restent mésenchymateuses. Aussi, les lymphocytes T autour des clusters cancéreux sont quasiment tous inhibés, cela confirme que 
+l'immunosuppression a bien été implémentée dans le modèle. 
+
+\noindent \\ Enfin, à partir de 13 jours, la modélisation montre en Figure~\ref{fig:13days}, une croissance exponentielle des cellules cancéreuses et une densification claire 
+du \gls{tme} du \gls{pdac}. Les macrophages M2 sont bien présents au sein du cancer en développement et provoquent l'inhibition de la réponse immunitaire. \\
+
+\noindent Les \gls{caf} associés au cancer font office de fondation dans la progression du cancer. Au-delà de 13 jours, on observe une croissance infinie des cellules 
+cancéreuses qui vont venir remplir entièrement l'espace de simulation, ce qui n'aura plus de sens biologique. De plus, il ne faut pas oublier que les bordures dans 
+PhysiCell sont fixes et donc brouillent l'importance des processus biologiques devant les contraintes physiques dues aux effets de bords. \\
+
+\begin{wrapfigure}[15]{l}{0.35\textwidth}
+  \centering
+  \includegraphics[width=0.35\textwidth]{13days.png}
+  \caption{La modélisation à 13 jours et 9 heures contient 2416 cellules. Les cytokines pro-inflammatoires se colorent en rouge plus elles sont présentes.}
+  \label{fig:13days}
+\end{wrapfigure}
+
+\noindent \\ \\ Aussi, l'angiogenèse (processus du cancer qui crée des vaisseaux sanguins de manières désorganisés afin de continuer à s'approvisionner en nutriments et oxygène) a été
+indirectement implémenté car dans notre modèle, l'oxygène est le seul nutriment permettant le fonctionnement normal des cellules et leur division. Or, la concentration 
+en oxygène dépend du nombre de cellules présentes aux alentours. Ainsi, l'hypoxie n'ayant pas d'effet sur les cellules cancéreuses dans ce modèle, celles-ci se 
+développent de manière croissante tant que les contraintes physiques comme la pression ne les en empêche pas. En effet, nous générons un lien entre hypoxie et pression en supposant que, plus il y a de cellules présente dans un certain espace, plus cet espace sera pauvre en oxygène en raison de la respiration de ces mêmes cellules.  \\ \\ \\
+\medskip
+
+\section{Discussion sur la modélisation}
+
+D'emblée, cette modélisation met bien en lumière les processus biologiques souhaités comme la progression de la tumeur, l'immunosuppression, la réponse immunitaire 
+et la transition épithélio-mésenchymateuse. De plus, un processus très important du cancer que l'on aurait pu modéliser plus en détail est l'angiogenèse, on aurait pu 
+penser à la création de canaux de cellules endothéliales qui sécrèteraient de l'oxygène tandis que les cellules cancéreuses pourraient être affectées par l'hypoxie.
+Aussi, notre modélisation nécessite également des corrections, notamment sur le fait que les cellules mésenchymateuses se groupent au niveau de l' \gls{ecm} et donc empêche les 
+cellules mésenchymateuses de se redifférencier en cellules épithéliales sans qu'elles ne se déplacent à d'autre endroit 
+dans le tissu. Ces modifications exigent l'implémentation de modules complémentaires en C++, cela nécessite des compétences en programmation que je n'ai pas encore 
+ainsi qu'une connaissance aiguë de l'architecture de PhysiCell.
+
+\noindent Ensuite, notre modélisation a permis de comprendre que la progression du cancer dépend grandement de l'état initial du tissu et de son
+organisation spatiale. En effet, la transition épithélio-mésenchymateuse permet d'identifier des spots de préférences pour les cellules cancéreuses où la réponse 
+immunitaire y est peu présente et où la division cellulaire cancéreuse y sera idéale. 
+
+\noindent Enfin, cette modélisation a pour objectif d'étudier de possibles voies thérapeutiques (parfois très novatrices), en simplement ajoutant la nouvelle thérapie
+comme un agent ou un substrat avec une ou plusieurs règles d'interactions spécifiques et observer l'évolution de notre modélisation avec et sans thérapie. Cette 
+implémentation supplémentaire est assez simple avec PhysiCell. Ainsi, la modélisation se révèle très adaptable entre l'état initial fournit par des données spatiales de patients
+et d'une thérapie spécifique au patient étudié. \\   
+
+Etudier l'organisation spatiale du \gls{pdac} semble être une bonne approche pour améliorer la modélisation
+ainsi que pour comprendre davantage le \gls{tme}.
+
+%===========================================
+%=============== CHAPTER 2 =================
+%===========================================
+
+\chapter{Analyse spatiale d'échantillons de cancer du pancréas}
+
+Afin de comprendre l'intérêt d'étudier l'organisation spatiale des tissus il faut comprendre que le cancer se développe de différentes manières pour chaque 
+patient. Si les voies métaboliques et oncogéniques forment le cadre d’étude le plus fréquent, l’organisation spatiale n’en demeure pas moins intéressante pour 
+analyser notamment la mécanobiologie tumorale. 
+
+\section{Présentation du dataset (mIF et IMC)}
+
+Le dataset que nous utilisons contient 46 patients atteint de \gls{pdac} pour lesquels des images \gls{mif} (multiplex immunofluorescence) ont été 
+produites et pour sept d'entre eux des images \gls{imc} (Imaging Mass Cytometry) ont également été générés.
+
+La \gls{mif} combine des anticorps primaires non marqués avec une amplification pour empiler 6–8 marqueurs sur un seul tissu biologique tandis que l’\gls{imc} 
+utilise des anticorps couplés à des isotopes métalliques détectés par spectrométrie de masse après ablation laser, ce qui permet d’imager des dizaines de marqueurs 
+simultanément avec très peu de recouvrement spectral et sans autofluorescence.
+Ces deux techniques de protéomique spatiale se superposent pour donner des informations spatiales complémentaires, la première permet une vision plus globale du tissu 
+mais moins profonde en terme de phénotypage alors que la seconde propose une large diversité de marqueurs pour obtenir un phénotypage plus précis malgré une plus petite échelle de visualisation, environ 2 mm² pour une image \gls{imc} contre 25 cm² pour la plus large des images \gls{mif}.
+Nous disposons aussi d'image H\&E qui correspondent au tissu prélevé entier et qui sera décomposé en layer lors de la microscopie à immunofluorescence.
+Une image H\&E est une image de tissu biologique coloré avec la coloration standard Hématoxyline-Éosine. L'hématoxyline (H) colore en bleu/violet les noyaux des cellules (acides nucléiques, ADN) tandis que, l'éosine (E) colore en rose les structures cytoplasmiques et extracellulaires (protéines, matrice). Cette technique de microscopie est souvent utilisé lors de la segmentation cellulaire.
+\begin{wrapfigure}[23]{l}{0.30\textwidth}
+  \centering
+  \includegraphics[width=0.30\textwidth]{scale.png}
+  \caption{Les différentes échelles entre les images H\&E, \gls{mif} et \gls{imc}. L'image H\&E est présente en haut ensuite, nous avons l'image \gls{mif} puis enfin l'image \gls{imc}}
+  \label{fig:scale}
+\end{wrapfigure} 
+
+Dans la Figure~\ref{fig:scale}, les images H\&E, \gls{mif} et \gls{imc} sont imbriquées les unes dans les autres. Dans notre dataset, les images \gls{mif} sont composées de 
+deux combos ayant chacun 4 marqueurs, ces combos sont distincts l'un de l'autre et donc ne repère pas les mêmes phénotypes (Figure~\ref{fig:phenotypageIF}). 
+Aussi, les \gls{mif} sont décomposés en 6 layers pour chacun des patients, 5 layers représentant différentes régions du \gls{tme} tandis que le 6ème layer est le tout combiné. Les layers représentes alors les régions suivantes :
+
+\begin{itemize}[label=--]
+  \item layer n°1 : Tumeur
+  \item layer n°2 : Adipose 
+  \item layer n°3 : Ganglion lymphatique
+  \item layer n°4 : Pancréas
+  \item layer n°5 : Tumeur dense
+\end{itemize}
+
+\noindent Les images \gls{imc} contiennent quant à elles 39 marqueurs en une seule image et sont décomposés en 4 ROI (régions d'intérêts). Ces ROI sont choisi est défini par des experts pathologistes qui ont eux mêmes annotés ces images. Chaque \gls{imc} peut contenir en moyenne 30 000 cellules, ce qui est peu comparé à certaines \gls{mif} qui peuvent contenir plusieurs centaines de milliers de cellules.
+
+\begin{itemize}[label=--]
+  \item ROI n°1 : contact avec les glandes tumorales
+  \item ROI n°2 : distant des glandes tumorales
+  \item ROI n°3 : stroma ou périphérie tumorale
+  \item ROI n°4 : ciblage des cellules cancéreuses impliquées dans l'\gls{emt}
+\end{itemize}
+
+\noindent \\ De plus, il faut faire très attention au fait que nous ne pouvons pas utiliser les deux combos de \gls{mif} en même temps car celles-ci ne sont pas générée à partir de la même
+tranche de tissu.
+
+\begin{wrapfigure}[9]{r}{0.25\textwidth}
+  \centering
+  \includegraphics[width=0.25\textwidth]{phenotypageIF.png}
+  \caption{Schéma montrant le phénotypage des cellules provenant des \gls{mif} grâce aux 8 marqueurs}
+  \label{fig:phenotypageIF}
+\end{wrapfigure}
+
+\noindent \\ Ce dataset n'est pas très large en ce qui concerne les images \gls{imc} mais l'est assez dans le cadre des \gls{mif}. Ces images sont transcrites sous la forme de fichiers CSV où chaque cellule est associée à sa position en 2D, aux taux de présence des marqueurs biologiques et à un ID. Avant d'analyser ces images, la segmentation a d'abord été faite à partir des images H\&E puis le phénotypage des images H\&E a été réalisé ensuite par un ancien stagiaire. 
+De manière générale, on réalise un phénotypage en établissant, grâce à la littérature, des seuils pour chacun des marqueurs. Pour ensuite définir un type cellulaire pour chacune des combinaisons (+,-) de marqueurs. Les marqueurs des \gls{mif} sont visibles en Figure~\ref{fig:phenotypageIF}.
+Ainsi, nous pouvons remplacer tout ce qui concerne le marquage biologique par le phénotype des cellules.
+
+\begin{wrapfigure}[13]{l}{0.30\textwidth}
+  \centering
+  \includegraphics[width=0.30\textwidth]{integralign.png}
+  \caption{Schéma montrant qu'une cellule peut apparaître à deux endroits différents sur deux images à cause du décalage lors de la tranche}
+  \label{fig:integralign}
+\end{wrapfigure}
+
+\noindent \\ En effet, la Figure~\ref{fig:integralign} montre que l'utilisation de plusieurs tranches peut créer un décalage spatial faisant se différencier deux cellules pourtant identiques sur le tissu. Ce décalage spatial est dû à la différence de position du noyau d'une cellule sur deux tranches, possible car une cellule est une structure 3D non uniforme et non symétrique. 
+
+En somme, les techniques spatiales single-cell (\gls{mif}, \gls{imc}, ou autres transcriptomiques spatiales) ancrent l’identité moléculaire des cellules dans leur contexte 
+tissulaire, révèlent l’hétérogénéité et les interactions de niche, et peuvent compléter puissamment le \gls{bulk} et le \gls{scrna-seq} pour orienter la découverte de cibles 
+thérapeutiques et de biomarqueurs.\\ \\ \\
+
+\section{Outils d'analyse de réseaux spatiaux}
+
+Afin d'étudier l'organisation spatiale du \gls{tme} nous devons utiliser des outils d'analyses statistiques sur ces deux jeux de données omique spatiale. Alexis Coullomb et Vera PANCALDI ont développé au sein de l'équipe 21 du CRCT deux outils d'analyse spatiale de tissue biologique. Le 
+premier se nomme Tysserand\parencite{coullomb_tysserand-fast_2021} et le second MOSNA\parencite{coullomb_mosna_2023}.
+
+\subsection{Tysserand}
+
+Tysserand est un outil de construction de graphes spécialisé dans les données spatiales biologiques (tissus cellulaires). Il est rapide, simple à l'utilisation et 
+s'adapte à plusieurs types de données d'entrées comme les données VISIUM, \gls{mif} et \gls{imc}. A l'aide de Tysserand, nous allons pouvoir extraire les réseaux spatiaux de toutes
+les \gls{mif} et des \gls{imc} afin de comprendre l'organisation spatiale directe de nos échantillons. Nous pouvons extraire des informations spécifiques de chaque patient comme des clusters de cellules, des régions denses ou nécrotiques ou autre. 
+
+\subsection{MOSNA (Multi‑Omics Spatial Network Analysis)}
+
+MOSNA est un outil conçu pour analyser la structure spatiale des tissus biologiques à partir de graphes de voisinage, générés par des outils comme Tysserand. 
+
+\begin{wrapfigure}[5]{l}{0.15\textwidth}
+  \centering
+  \includegraphics[width=0.15\textwidth]{assort.png}
+  \caption{Schéma montrant le fonctionnement de la métrique d'assortativité}
+  \label{fig:assort}
+\end{wrapfigure}
+
+\noindent \\ MOSNA calcule des métriques d’assortativités et utilise diverses techniques pour détecter des niches dans les réseaux. 
+L’assortativité mesure la tendance des cellules à s’associer avec des cellules du même type (assortativité positive, créant des clusters homogènes, visible sur 
+la diagonal de la matrice de mélange) ou au contraire à se mélanger avec d’autres types (assortativité négative, favorisant l’hétérogénéité locale). Ce paramètre 
+renseigne directement sur le degré de ségrégation ou de mélange entre populations, ce qui est crucial pour comprendre l'environnement tumoral ou la réponse 
+immunitaire (Figure~\ref{fig:assort}).
+De plus, un de ses apports majeurs est l’étude des niches cellulaires, c’est-à-dire des micro-environnements locaux où certaines populations cellulaires se 
+regroupent ou interagissent préférentiellement. En décrivant le type de voisins immédiats d’une cellule, MOSNA permet d’identifier des niches riches en \gls{caf}, en 
+macrophages immunosuppresseurs, ou au contraire des zones infiltrées par des lymphocytes. \\
+Cette approche aide à relier l’organisation spatiale aux fonctions biologiques
+(barrières stromales, foyers immunitaires, zones de résistance thérapeutique). En combinant ces mesures locales (niches, voisinages) et globales (corrélations, 
+longueurs de corrélation). MOSNA offre un cadre quantitatif robuste pour comparer l’organisation spatiale des tissus et dégager des signatures biologiques pertinentes 
+dans le cancer et d’autres contextes pathologique
+Nous pouvons ensuite comparer ces informations à des données patients de survie pour interpréter l'importance de certaines mesures du micro-environnement sur la 
+gravité de la pathologie.
+
+\subsection{Développement d'outil qui encapsule MOSNA et Tysserand}
+
+\begin{wrapfigure}[10]{l}{0.35\textwidth}
+  \centering
+  \includegraphics[width=0.35\textwidth]{GUI.png}
+  \caption{Capture d'écran de l'interface graphique}
+  \label{fig:GUI}
+\end{wrapfigure}
+
+\indent \\ Un des objectifs que je me suis fixé était de créer un outil qui permettrait à n'importe qui du labo d'utiliser le package MOSNA pour détecter des niches et faire des 
+mesures de l'assortativité dans des réseaux de tissus biologiques. 
+J'ai développé une interface graphique (Figure~\ref{fig:GUI}) simple à utiliser qui permet de créer des réseaux cellulaires avec Tysserand en incluant une 
+parallélisation pour chaque échantillon. Cette interface peut utiliser ensuite MOSNA sur les réseaux spatiaux pour extraire des mesures statistiques spécifiques de 
+chacun des réseaux biologiques. \\ \\
+
+\section{Méthodes}
+
+\subsection{Réseaux Tysserand et triangulation de Delaunay}
+
+Tout d'abord, pour générer les réseaux biologiques associés aux images \gls{mif} et \gls{imc} nous utilisons les positions des cellules comme noeuds et les arêtes seront alors 
+définis par triangulation de Delaunay.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{IMC_Tysserand_network_A_ROI_01.png}
+  \caption{Réseaux cellulaires générés grâce à Tysserand à partir d'une image \gls{imc} ciblant le ROI 1}
+  \label{fig:IMC_A}
+\end{figure}
+
+\textbf{La triangulation de Delaunay} est une méthode géométrique couramment utilisée pour construire des réseaux spatiaux à partir des coordonnées de cellules dans un tissu\parencite{grise_surface_2011}. Elle relie chaque cellule à ses voisines en formant des triangles qui respectent une règle simple : aucun autre point ne doit se trouver à l’intérieur du cercle circonscrit à chaque triangle. Cette approche a l’avantage de ne pas nécessiter de paramètre arbitraire comme un rayon seuil ou un nombre de voisins fixe, elle est donc
+complètement «\,data-driven\,». Elle s’adapte naturellement aux variations locales de densité cellulaire. En biologie, elle permet donc de définir des relations de proximité plausibles entre cellules et de mieux comprendre l’organisation des micro-environnements. Toutefois, la triangulation de Delaunay présente aussi des limites : elle peut créer des arêtes peu réalistes, en particulier en bordure des échantillons ou dans des zones de faible densité, et il est parfois nécessaire de filtrer ou de combiner cette méthode avec d’autres critères pour obtenir un graphe représentatif de la réalité biologique.
+
+En l'occurrence, dans la Figure~\ref{fig:IMC_A} la triangulation de Delaunay semble assez efficace pour définir des arêtes d'interactions entre les différentes cellules.
+
+\subsection{Assortativité}
+
+L’assortativité d’un graphe mesure la tendance des noeuds reliés à présenter des caractéristiques similaires (assortativité positive) ou, au contraire, dissemblables (désassortativité), avec un coefficient $r\in[-1,1]$.\parencite{coullomb_mosna_2023,}
+
+\noindent Les résultats sont alors convertis en z-score via cette formule \[ z = \frac{x - \mu}{\sigma} \] :
+
+\begin{wrapfigure}[16]{l}{0.40\textwidth}
+  \centering
+  \includegraphics[width=0.40\textwidth]{assortativity_z-scored_patient-A_ROI-01.png}
+  \caption{Assortativité du réseau cellulaire de la Figure~\ref{fig:IMC_A}. L'assortativité globale du réseau converti en z-score est de 245}
+  \label{fig:assort_IMC_A}
+\end{wrapfigure}
+
+\noindent \\ Nous utilisons les z-scores comme normalisation afin de retirer des biais qui peuvent faussé nos résultats comme par exemple le type cellulaire.
+
+\noindent \\ Pour une propriété catégorielle (phénotype cellulaire), on utilise la matrice de mélange normalisée, l’assortativité par attribut quantifie le «\,brassage cellulaire\,»
+(valeurs proches de $0$), la ségrégation homotypique ($r>0$) ou l’interconnexion hétérotypique ($r<0$).
+
+\noindent Pour finir, nous allons calculer les moyennes des résultats d'assortativité pour chaque échantillon (46 pour les \gls{mif} et 8 pour les \gls{imc}).
+Nous pouvons voir le résultat de ces calculs pour les \gls{mif} et \gls{imc} en annexe Figure~\ref{fig:assort_moy}, Figure~\ref{fig:assort_moy_C1} et Figure~\ref{fig:assort_moy_C2}. \\ \\ \\ 
+
+\subsection{NAS (Neighbors Aggegation Statistics)}
+
+Le NAS dans MOSNA est une méthode de découverte de niches locales, pour chaque cellule (nœud) et pour chaque attribut (type cellulaire), on agrège la valeur du nœud 
+avec celles de ses voisins (ordre 1, voire ordres supérieurs), puis on calcule des statistiques de tendance et de dispersion 
+(par exemple : moyenne, écart-type). 
+Ces vecteurs forment une table NAS (une ligne par cellule), qui est ensuite soumise à une réduction de dimension (Cela peut être une UMAP) et à un clustering (Leiden, GMM, HDBScan) 
+pour définir des niches (micro-environnements locaux) comparables entre échantillons/patients. Ainsi, on peut définir une niche par un type de voisinage spécifique a un tissu biologique.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{IFnicheG1C2.png}
+  \caption{Image montrant à gauche le nombre de cellules par clusters (niches) trouvé par NAS et à droite la composition en type cellulaires de chacune des niches}
+  \label{fig:IFniche}
+\end{figure}
+
+L'algorithme NAS de MOSNA proposent un nombre d'hyperparamètre important à sélectionner afin de visualiser différentes détections de niches pour un même réseau biologique. Il peut être intéressant de changer de méthode de clustering pour faire apparaître différentes informations ou voir si l'information se conserve malgré le changement d'algorithme.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{IF_netniche_G1C2.png}
+  \caption{Réseaux cellulaires provenant d'une image \gls{mif}, second combo, coloré par les niches, détectée en Figure~\ref{fig:IFniche}}
+  \label{fig:IF_netniche}
+\end{figure}
+
+\noindent \\ Dans des réseaux cellulaires biologiques (nœuds = cellules, arêtes = contacts/proximité), 
+$r$ renseigne sur l’architecture de niches : un $r$ positif pour le couple de phénotype (CAF–CAF, Tumeur–Tumeur) traduit des îlots homotypiques 
+et une compartimentation spatiale, tandis qu’un $r$ négatif suggère des interfaces fonctionnelles entre types distincts (tumeur–immune). Son intérêt est double : 
+\begin{itemize}[label=--] 
+  \item Relier l’organisation spatiale à des fonctions (exclusion T, zones immunosuppressives, fronts d’invasion)
+  \item Comparer les échantillons via une statistique robuste et sans dimension.
+\end{itemize}
+
+\noindent La Figure~\ref{fig:IFniche} en sortie de NAS donne le nombre de cellules que contient chaque niche ainsi que la composition en phénotype de chaque niche.
+
+\noindent Et enfin, nous pouvons recolorer notre réseau initial (présent en Annexe en Figure~\ref{fig:G1C2} )avec les couleurs des niches comme le montre la Figure~\ref{fig:IF_netniche}.
+
+\section{Résultats de l'analyse spatiale}
+
+Ces analyses nous ont permis d'obtenir une connaissance accrue du \gls{tme} du \gls{pdac}. Mon pipeline est disponible sur ce dépôt Github 
+(\href{https://github.com/OwenGriere/Mosna_analysis}{Pipeline enveloppant Tysserand et MOSNA})
+
+\noindent \\ La Figure~\ref{fig:assort_IMC_A} montre la matrice d'assortativité ayant comme métriques des z-scores  où l'on peut voir les neutrophiles et les 
+cellules cancéreuses formant des îlots homotypiques tandis que les cellules immunitaires non immunosuppressives comme les macrophages M1, les cellules myéloïdes 
+et les lymphocytes T sont dégroupés par rapport aux cellules cancéreuses. Cette dernière information montre le caractère immunosuppresseur du cancer du pancréas à 
+travers l'étude de l'organisation spatiale de son \gls{tme}.   
+
+
+\begin{wrapfigure}[26]{l}{0.60\textwidth}
+  \centering
+  \includegraphics[width=0.60\textwidth]{cluster_heatmap_IF_survival.png}
+  \caption{Heatmap d'assortativité pour les 46 patients de notre dataset avec des informations sur leur survie}
+  \label{fig:heatmap}
+\end{wrapfigure}
+
+\noindent Aussi, on remarque grâce à la Figure~\ref{fig:IMC_A} que les neutrophiles semble se retrouver au centre de cluster de cellules tumorales. Une 
+possibilité serait que les neutrophiles ainsi positionnés nous indiquent la présence de vaisseaux sanguins capillaires. Ces canaux nourrissent alors les cellules 
+cancéreuses qui consomment plus que les cellules saines. Pourtant, la Figure~\ref{fig:assort_IMC_A} nous indique qu'il ne semble y avoir aucune assortativité entre 
+les neutrophiles et les cellules cancéreuses. De plus, la Figure~\ref{fig:vide_cancer} montre que les cellules cancéreuses semblent former une barrière autour des
+zones de vides. Ces zones de vides peuvent être des zones nécrotiques, or, les débris nécrotiques peuvent sécrétés des facteurs immunosuppresseurs qui participent 
+eux-mêmes au développement du cancer.
+
+\noindent Sur certaines images (comme la Figure~\ref{fig:TLS}) on peut même apercevoir des structures lymphoïdes tertiaires (\gls{tls}) qui sont de larges 
+clusters de cellules immunitaires B et qui peuvent définir un état plus réceptif aux immunothérapies. Recueillir des données sur ce processus biologique, afin 
+de potentiellement l'introduire dans notre modélisation, peut nous permettre de comprendre comment le \gls{tme} répond à une immunothérapie.
+
+\begin{wrapfigure}[17]{r}{0.35\textwidth}
+  \centering
+  \includegraphics[width=0.35\textwidth]{cluster_heatmap_IF_Tumor_survival.png}
+  \caption{Heatmap d'assortativité sur le layer "tumeur" pour les 46 patients de notre dataset avec des informations sur leur survie}
+  \label{fig:heatmap_tumor}
+\end{wrapfigure}
+
+\noindent La Figure~\ref{fig:heatmap} montre que les layers les plus explicites en terme de distribution spatiale des phénotypes sont les ganglions lymphatiques ainsi
+que la tumeur. Aussi, les phénotypes qui décrivent le mieux une conformation spécifique du cancer sont les cellules cancéreuses évidemment mais aussi les cellules 
+immunitaires. Malgré tout, ces informations ne permettent pas d'identifier une cause particulière de mortalité car le facteur de survie semble encore aléatoire.
+
+\noindent La Figure~\ref{fig:heatmap_tumor} est intéressante car elle montre trois clairement deux types de micro-environnement dans ce layer. Le premier comporte quatre 
+patients qui ont survécu et cela pourrait être une voie d'étude mais pour le moment, il y a trop peu de patients pour former des groupes robustes. 
+
+\noindent Grâce à ces statistiques générées pour tous ces échantillons nous pourrions être en mesure de générer des réseaux synthétiques. L'intérêt de tels réseaux 
+serait d'accumuler des données à analyser en ignorant les deux contraintes constantes de la recherche : les financements et le nombre de patients.
+En effet, les \gls{imc} coutent très chères et les patients atteints de \gls{pdac} ne sont pas fréquents et les expériences de microscopies spatiales ne sont pas 
+évidentes à réaliser notamment en raison de la densité du stroma. Ainsi, obtenir des données synthétiques pour s'en servir comme état initial dans notre modèle pourrait
+être très encourageant pour explorer des processus biologiques spécifiques au \gls{pdac} à travers un \gls{abm}.
+
+%===========================================
+%=============== CHAPTER 3 =================
+%===========================================
+
+\chapter{Génération de réseaux synthétiques à partir de statistiques extraits de réseaux}
+
+Afin de générer de nouveaux réseaux synthétiques, nous allons utiliser un processus de \gls{mrf} en utilisant la longueur de corrélation ainsi que l'assortativité. 
+Un Champ Aléatoire de Markov (MRF) est un modèle probabiliste qui représente un tissu biologique comme un réseau où chaque cellule ou spot est relié à ses voisins. 
+L’idée clé est que l’état d’une cellule dépend principalement de son voisinage immédiat, et pas de toutes les autres cellules du tissu \parencite{zhong_hidden_2023}. 
+l'objectif est d'obtenir des réseaux spatiaux cohérents en utilisant les résultats que nous avons déjà obtenus.
+De plus, dans un tissu stationnaire à corrélation de portée finie, l’ergodicité garantit que les mesures statistiques sont conservées a travers l'écoulement du temps 
+et à travers les différents échantillons.
+Cette assertion rend l'étude des images \gls{mif} et \gls{imc} très intéressante car leurs statistiques sont censées se conserver car elles se situent sur les mêmes 
+espaces, l'une étant incluse dans l'autre. Ainsi, concevoir statistiquement un réseau \gls{mif} 
+permet de créer un réseau \gls{imc} et vice-versa. Aussi de manière générale concevoir des réseaux à une certaine échelle permet d'obtenir des informations 
+statistiques qui vont être conservées à une autre échelle. De plus, les mesures statistiques servent à générer ces réseaux synthétiques : certaines imposent des contraintes, 
+d’autres permettent de valider les résultats.
+
+\section{Méthodologie}
+
+\noindent Pour générer un réseau cellulaire synthétique à partir d’un échantillon réel qui : 
+
+\begin{itemize}[label=--]
+  \item respecte les proportions phénotypiques
+  \item reproduit une corrélation spatiale réaliste 
+  \item impose des affinités locales observées
+\end{itemize}
+
+\noindent \\ Nous estimons tout d'abord une longueur de corrélation \( \xi \) en mesurant comment la similarité phénotypique moyenne décroît avec la distance entre cellules dans 
+les données réelles (décroissance de type exponentielle). Si le domaine simulé n’a pas la même échelle, nous recalons simplement \( \xi \) à la taille du domaine. 
+
+\noindent \\ Pour induire des amas spatiaux, nous construisons pour chaque phénotype \( k \) un champ continu \( F_k(\mathbf{x}) \) en lissant un bruit gaussien 
+(le degré de lissage est proportionnel à \( \xi \)) et en ajoutant un léger bruit local ; ce champ représente des régions spécifiques du tissu où le phénotype \( k \) est
+favorisée. Nous tirons ensuite des positions candidates uniformes dans le domaine, puis, pour respecter les proportions cibles \( \{\pi_k\} \), nous allouons 
+environ \( n_k \approx \pi_k n \) cellules au type \( k \) en combinant un tirage guidé par les zones où \( F_k \) est élevé (fraction \( \alpha \)) et un tirage 
+aléatoire (fraction \( 1-\alpha \)). Le graphe de voisinage est construit par triangulation de Delaunay sur ces positions. 
+
+\noindent \\ Enfin, nous affinons les étiquettes par un modèle de Potts avec champs externes, mis à jour par Gibbs : pour une cellule \( i \) et un type 
+candidat \( k \). Nous utilisons une formulation en \emph{énergie locale} qui utilise l'hamiltonien du modèle de Potts. Pour une cellule \(i\) et un type candidat \(k\), 
+l'énergie associée est :
+\[
+E_i(k) = -\beta\,F_k(\mathbf{x}_i) \;-\; J\,\sum_{j\in N(i)} A_{k,\phi_j},
+\]
+où \(F_k(\mathbf{x}_i)\) est le champ externe pour le type \(k\) au point \(\mathbf{x}_i\), 
+\(A\) la matrice d’assortativité issue des données réelles, \(phi_i\) est le phénotype de la cellule i,
+\(N(i)\) l’ensemble des voisins de \(i\), \(\beta\) le poids des champs et \(J\) le poids des interactions.
+
+\noindent La mise à jour de Gibbs échantillonne le nouveau label via la distribution de Boltzmann normalisée, ainsi la probabilité d'assignation d'un nouveau phénotype devient :
+
+\[
+p_i(k)=\mathbb{P}\!\left(\phi_i=k\right) =\frac{\exp\!\big(-E_i(k)\big)}{\displaystyle\sum_{j\in \mathcal{P}} \exp\!\big(-E_i(j)\big)}
+\]
+où \(\mathcal{P}\) est l'ensemble des phénotypes possibles dans ce réseau. 
+
+\noindent Nous répétons ces mises à jour sur quelques itérations jusqu’à stabilisation (suivie du nombre de changements d’étiquette par itération), puis nous vérifions
+que l’assortativité et la longueur de corrélation du réseau généré sont proches de celles observées dans l’échantillon réel. \\
+
+\section{Résultats}
+
+Nous utilisons la matrice d'assortativité extraite d'une image \gls{mif} du second combo, pour contraindre notre réseau synthétique à imiter cette même image.
+Il est possible de consulter le script dans ce dépôt Github (\href{https://github.com/OwenGriere/Mosna_analysis}{Génération de réseaux synthétiques})  
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{reconstruct_field.png}
+  \caption{Champs gaussiens générés en utilisant la longueur de corrélation}
+  \label{fig:field}
+\end{figure}
+
+Les champs gaussiens générés grâce aux distances de corrélation ont un grand coût calculatoire qui dépend de la taille du réseau souhaité, en revanche ceux-ci sont 
+parfaitement en accord avec chaque phénotype présent dans le réseau originel. Ces champs ont été générés avec cette formule en 2D mais l'approche est facilement adaptable en 3D.
+
+\[
+F(x,y) \;=\; \int_{\mathbb{R}^2} \eta(u,v)\,
+\frac{1}{2\pi \xi^2}\,
+\exp\!\left(-\frac{(x-u)^2 + (y-v)^2}{2\xi^2}\right)\,du\,dv
+\]
+
+Où \(\xi\) est la longueur de corrélation et \(\eta(u,v)\) est un bruit aléatoire ajouté pour éviter la trop grande spécificité des champs par rapport aux données.
+
+\noindent En effet, en Figure~\ref{fig:field} nous pouvons voir que les champs gaussien mettent en évidence
+des régions préférentielles pour chacun des phénotypes. Ce manque de précision apparent est dû au manque de diversité cellulaire dans les \gls{mif} qui donne de grandes longueurs de corrélation.
+
+\begin{wrapfigure}[15]{r}{0.50\textwidth}
+  \centering
+  \includegraphics[width=0.50\textwidth]{test_1000.png}
+  \caption{Test pour 1000 cellules du pipeline de génération de réseau synthétique}
+  \label{fig:reseau_synth}
+\end{wrapfigure}
+
+\noindent Ensuite, à cause d'un \gls{chaos thermique} trop important dans le réseau, l'échantillonnage de Gibbs ne converge pas vers 0 transitions. 
+L'échantillonnage converge rapidement vers un dixième du nombre de transitions lors de la première itération.
+
+\noindent Finalement, je ne suis pas encore parvenu à générer de réseaux synthétiques et je n'ai pas encore de piste d'amélioration pour ce pipeline. 
+Malgré tout, étudier la génération de réseaux biologiques reste très formateur en proposant une approche plus physique et mathématique (approche que j'affectionne tout particulièrement).
+Ce projet a tout de même pu être présenté à JOBIM 2025 à Bordeaux où j'ai pu décrire mon étude à travers ce poster (Figure~\ref{fig:poster}).
+
+%===========================================
+%=============== CHAPTER 4 =================
+%===========================================
+
+\chapter{Un stage multi-projet}
+
+En plus de ce projet, j'ai pu participer humblement à plusieurs autre projets que voici :
+
+\section{Modèle PhysiCell pour un modèle de Reinforcement Learning}
+
+Un des doctorants de l'équipe conçoit un algorithme d'apprentissage par renforcement en tant que module de PhysiCell. L'objectif étant d'avoir un modèle qui ajoute des
+niveaux de concentration à chaque pas de temps dans une modélisation de manière a ce que, selon l'objectif fixé, ces niveaux de concentrations suivent un trajet optimal.
+On peut par exemple considérer un traitement qui réduit le nombre de cellules cancéreuses mais qui est nocif pour le patient, l'algorithme aurait donc le pouvoir d'apprendre
+le meilleur moyen de réduire le nombre de cellules cancéreuses tout en injectant le moins de traitement aux patients. Dans ces conditions, la dynamique du tissu biologique
+et de la temporalité de la modélisation, affecte énormément le chemin optimal.
+
+Mon objectif dans ce projet était de générer une modélisation qui fait sens biologiquement mais qui est assez simple pour que l'algorithme d'apprentissage par renforcement
+converge. On a alors choisi un modèle d'une réponse immunitaire dans un tissu cancéreux et après de nombreuses reformulations de la modélisation qui oscillait entre
+modèle trop simple et modèle trop complexe. On peut alors trouver cette modélisation dans ce dépôt Github (\href{https://github.com/OwenGriere/PhysiCell-model-of-PDAC-progression}{Le modèle de réponse immunitaire})
+dans l'exemple n°1.
+
+\section{IntegrAlign}
+
+Durant le stage, comment réunir deux combos sur une même image a été une problématique. La Figure~\ref{fig:integralign} montre que les combos sont fait à partir de tranches 
+différentes d'un même tissu. Pour relier les deux cellules, ma première idée a été d'utiliser un filtre gaussien qui lierait deux points par proximité sur une distance 
+euclidienne mais l'association entre les cellules du combo 1 vers les cellules du combo 2 doit être une application bijective.
+\noindent \\ Ensuite, les résultats n'était pas mauvais mais pas suffisant non plus, donc, on m'a proposé d'utiliser un software en développement qui se nomme 
+IntegrAlign\parencite{hermet_integralign_2025,}. IntegrAlign utilise les marqueurs biologiques entre les deux combos pour récupérer l'information de deux cellules 
+identiques.
+\noindent \\ Finalement, en raison du prochain projet j'ai laissé l'avancement de ce test à un autre stagiaire.
+
+\section{Proposition de Thèse pour CARe}
+
+En Juin, Vera et moi avons candidaté à un organisme de financement de thèse (CARe) pour une thèse alliant méchanobiologie, modèle physique de la chromatine, du noyau
+et de la cellule, \gls{tme} et épigénomique.
+
+Nous avons du envoyé une proposition de thèse et j'ai pu participer à un oral vers la fin juin. Le sujet de cette thèse est particulièrement novateur et 
+pluridisciplinaire. Le projet s’inscrit dans un cadre où des mutations oncogènes peuvent exister dans des tissus sains, et où le contexte tissulaire, notamment les 
+forces mécaniques, conditionne la plasticité cellulaire. Des éléments clés relient mécanotransduction et état épigénomique : le facteur Polycomb EZH2, régulateur 
+majeur de la structure 3D de la chromatine, intervient aussi dans la mécanodétection.
+
+\begin{wrapfigure}[10]{l}{0.40\textwidth}
+  \centering
+  \includegraphics[width=0.40\textwidth]{valley.png}
+  \caption{Cette figure montre le processus de différentiation des cellules et surtout le processus de dé-différentiation des cellules cancéreuse vers un phénotype
+  qui gagne en plasticité}
+  \label{fig:valley}
+\end{wrapfigure}
+
+\noindent Des travaux suggèrent que la structure/rigidité de l’hétérochromatine et son ancrage périphérique à la lamina gouvernent des aspects de la mécanique 
+nucléaire, en couplant l’architecture interne du noyau aux sollicitations mécaniques externes.
+
+\noindent \\ Le nombre de noeuds de la chromatine (crosslinking) ferait ainsi passer d’un comportement de polymère à un comportement de gel, établissant un lien entre état 
+épigénomique et propriétés mécaniques du noyau.
+Sur cette base, le sujet de thèse vise à relier le stress mécanique tissulaire aux changements d’architecture épigénomique dans le cancer, puis à suivre les 
+conséquences sur la forme et la rigidité du noyau, la mécanique cellulaire, l’expression génique et les phénotypes, en élargissant la perspective à l’échelle du 
+tissu. Un accent particulier est mis sur le \gls{pdac} et son micro-environnement en raison de sa densité particulièrement élevé (favorisant donc les contraintes physiques). Les \gls{caf} modulent la migration cellulaire et l'\gls{emt} via le remodelage de l’\gls{ecm}. 
+
+
+\begin{wrapfigure}[15]{r}{0.60\textwidth}
+  \centering
+  \includegraphics[width=0.60\textwidth]{these.png}
+  \caption{Modèle moléculaire du noyau (réseaux de lames auto-assemblées, chromatine séparée en phases, simulations avec concentration croissante de lames et
+  d'hétérochromatine) et schéma pour l'intégration des données épigénomiques dans des modèles à échelle de plus en plus grande, jusqu'au niveau des tissus. 
+  Encadré : Données sur les \gls{caf} et les organoïdes \gls{pdac} sous pression (C. Jean, A. Papantonis, SCIE-PANC)}
+  \label{fig:these_picture}
+\end{wrapfigure}
+
+\noindent \\ L'objectif de cette thèse est de générer une modélisation qui lie directement force mécaniques extérieurs et phénotype de la cellule en passant par l'épigénomique
+et donc la structure en 3D de la chromatine. Pour commencer, on utiliserait le modèle d'Aykut Erbas de la chromatine dans le noyau\parencite{attar_chromatin_2024}, 
+chromatine qui est associée à un polymère et qui, suivant le maillage avec la lamina et les croisements de la chromatin avec elle même\parencite{attar_peripheral_2025} transforme ce polymère en gel. Ensuite, on devrait étendre progressivement ce modèle en y ajoutant le cytosquelette (le cytosquelette est la seule 
+structure de la cellule dans le cytoplasme qui est intéressant à modéliser car il transmet les forces mécaniques de la membrane lipidiques à la membrane nucléaire, 
+le reste n'ai composé quasiment que d'eau).
+Après cela, On ajouterait l'\gls{ecm} qui constituerait la source des forces mécaniques extérieures. Et pour finir, on étendrait encore cette modélisation à un niveau
+intercellulaire avec comme population cellulaire : \gls{caf} et cellules cancéreuses. (La Figure~\ref{fig:these_picture} explique schématiquement ce protocole)
+
+\noindent \\ À terme, l’ambition est d’éclairer les mécanismes de plasticité dans des contextes tissulaires spécifiques et d’ouvrir la voie à des stratégies combinatoires 
+(par exemple, sensibiliser à l’immunothérapie par des interventions sur l’épigénome) en ciblant l’interaction complexe entre cellules cancéreuses, \gls{caf} et l'\gls{ecm} dans 
+l’environnement immunosuppresseur du \gls{pdac}.
+
+%===========================================
+%=============== CHAPTER 5 =================
+%===========================================
+
+\chapter{Conclusion et Perspectives}
+
+\section{Conclusion}
+
+Ce stage m’a permis d’acquérir une vision intégrée de l’oncologie du \gls{pdac} centrée sur le \gls{tme}. Sur le plan biologique, j’ai mieux compris le rôle 
+structurant des \gls{caf} et de l’\gls{ecm} dans la densification stromale, l’hypoxie et l’entrave à l’infiltration immunitaire, ainsi que la dynamique des 
+macrophages M1/M2 dans l’immunosuppression locale. Aussi, j’ai développé des compétences solides en analyse spatiale de tissus. 
+
+De manière générale, je pense avoir compris le rôle du chercheur bien qu'il me manque encore le sens rédactionnel et organisationnel. J'ai particulièrement apprécié 
+que le stage soit multi-projet en plus d'avoir mon propre projet où j'ai pu être laissé en autonomie. J'ai grandement apprécié la diversité des cadres d'approches que j'ai 
+eu dans ce stage en passant par la modélisation mathématique, la biologie du cancer et la physique avec le modèle de Potts.
+
+\section{Perspectives}
+
+Tout d'abord, en ce qui concerne le projet, il pourrait être enrichissant de continuer à améliorer la modélisation et de commencer à la valider par la discussion avec
+diverses biologistes ainsi que par des vidéos de tranches épaisses de \gls{pdac} extraites lors de biopsies. 
+D'autres données de \gls{pdac} sont en cours d'acquisition et continuer à les analyser de la même manière pourrait être intéressant pour développer un classifieur de cellule
+au sein du \gls{tme} du cancer du pancréas. En effet, un autre stagiaire à participer à concevoir un classifieur pour les neutrophiles grâce à leur morphologie. je pourrais
+donc récupérer ses avancées pour générer potentiellement un modèle d'IA classifiant les cellules du \gls{tme} du \gls{pdac}. 
+Aussi, la génération de réseaux synthétiques semble être sur une bonne voie malgré un blocage dont je n'ai pas réussi à dégager une solution.
+
+Finalement, je suis toujours dans l'optique de trouver une thèse pour m'inscrire toujours plus dans le monde de la recherche. Je n'ai pas encore fait de choix entre public
+et privé, je compte laisser les opportunités guider ma voie professionnelle. 
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|}
+  \hline
+  Compétences mises en oeuvres & Avancement de leur acquisition \\
+  \hline
+  Rédaction de rapport & En cours d'acquisition \\
+  Utilisation de Github & Acquise  \\
+  Présentation orale du projet & Acquise  \\
+  Traitement de données spatiales & En cours d'acquisition \\
+  Modélisation biologique, mathématique & En cours d'acquisition  \\
+  Autonomie dans la réalisation de tâches confiées & Acquise  \\
+  Pré-évaluation d'une tache afin d'en donner une deadline & En cours d'acquisition \\
+  Pratique de l'anglais au sein d'une équipe internationale & En cours d'acquisition \\
+  \hline
+  \end{tabular}
+  \caption{Compétences mises en oeuvres et acquises durant ce stage}
+  \label{tab:exemple}
+\end{table}
+
+Les scripts sont disponibles dans ces dépôt Github :
+
+\begin{itemize}[label=--]
+  \item (\href{https://github.com/OwenGriere/Mosna_analysis}{Analyse MOSNA et Tysserand})
+  \item (\href{https://github.com/OwenGriere/PhysiCell-model-of-PDAC-progression}{Modèles PhysiCell})
+  \item (\href{https://github.com/OwenGriere/PDAC_assortativity}{Analyse de données patients pour la Figure~\ref{fig:heatmap}})
+\end{itemize}
+
+%===========================================
+%============= Bibliographie ===============
+%===========================================
+
+\appendix
+\cleardoublepage
+
+\printbibliography
+
+%===========================================
+%================ Glossaire ================ 
+%===========================================
+
+\glssetwidest{PDAC}
+\printglossary[title=Glossaire, toctitle=Glossaire]
+
+%===========================================
+%================= Annexes ================= 
+%===========================================
+
+\chapter{Annexes}
+\pagenumbering{gobble}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.90\textwidth]{poster.png}
+  \caption{Poster présenté à JOBIM 2025 à Bordeaux}
+  \label{fig:poster}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{IMC_Tysserand_network_E_ROI_03.png}
+  \caption{Réseau cellulaire provenant d'une image \gls{imc}, montrant en haut à gauche un cluster de cellules immunitaire B, un \gls{tls}}
+  \label{fig:TLS}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{IMC_Tysserand_network_F_ROI_2.png}
+  \caption{Réseau cellulaire provenant d'une image \gls{imc}, montrent des zones de vides autour des amas de cellules cancéreuses}
+  \label{fig:vide_cancer}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{IF_C2_Tysserand_network_G_layer_1.png}
+  \caption{Réseau cellulaire provenant d'une image \gls{mif}, second combo}
+  \label{fig:G1C2}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{assort_moy_C1.png}
+  \caption{Moyenne des mesures d'assortativité de tous les échantillons de \gls{mif} sur le 1er combo avec un bar plot pour chaque couple de phénotypes}
+  \label{fig:assort_moy_C1}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{assort_moy_C2.png}
+  \caption{Moyenne des mesures d'assortativité de tous les échantillons de \gls{mif} sur le 2ème combo avec un bar plot pour chaque couple de phénotypes}
+  \label{fig:assort_moy_C2}
+\end{figure}
+
+\newpage
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=1.05\textwidth]{Assort_moy.png}
+  \caption{Moyenne des mesures d'assortativité de tous les échantillons d'\gls{imc} avec un bar plot pour chaque couple de phénotypes}
+  \label{fig:assort_moy}
+\end{figure}
+
+\end{document}
