@@ -1,0 +1,97 @@
+% ========= Préambule importé depuis help/base.tex (extrait avant \begin{document}) =========
+
+% =============== Encodage & langue ===============
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{microtype}
+\usepackage{multicol}
+\usepackage{float} 
+
+% =============== Mise en page ===============
+\usepackage[a4paper,margin=1.5cm, bottom=2.2cm]{geometry}
+\usepackage{setspace}
+\setlength{\headheight}{15pt}
+\setlength{\footskip}{12mm}  
+\onehalfspacing
+
+% =============== Images & couleurs ===============
+\usepackage{graphicx}
+\graphicspath{{figures/}}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{amsmath,amssymb,amsfonts}
+
+\usepackage{tikz}
+\DeclareRobustCommand{\legenddot}[2][3pt]{%
+  \tikz[baseline=-0.6ex]{\draw[draw=black,fill=#2] (0,0) circle (#1);}%
+}
+% =============== En-têtes / pieds de page ===============
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0pt}
+\lhead{} \chead{} \rhead{}          
+\cfoot{\thepage}
+
+% =============== Liens cliquables & signets PDF ===============
+\usepackage{hyperref}
+\hypersetup{
+  pdfauthor   = {Owen GRIERE},
+  pdftitle    = {Rapport de Stage - CRCT - 2025},
+  pdfsubject  = {Rapport de Stage},
+  pdfcreator  = {LaTeX},
+  colorlinks  = true,
+  linkcolor   = teal,
+  urlcolor    = teal,
+  citecolor   = teal
+}
+\usepackage{bookmark}
+\usepackage{wrapfig}
+\usepackage{array}
+\usepackage{enumitem}
+\usepackage{tabularx}
+\usepackage{etoolbox} 
+\usepackage{caption, subcaption}
+\captionsetup{font={scriptsize,it}}
+
+%=============== Bibliographie ===============
+
+\makeatletter
+\newcommand{\tocnopage}[2]{%
+  \@ifpackageloaded{hyperref}{%
+    \addtocontents{toc}{\protect\contentsline{#1}{#2}{}{}}
+  }{%
+    \addtocontents{toc}{\protect\contentsline{#1}{#2}{}}
+  }%
+}
+\usepackage[section]{placeins}
+\usepackage{titlesec}
+\usepackage[backend=biber,style=numeric]{biblatex}
+\addbibresource{references/references.bib}
+
+%=============== Glossaire ===============
+
+\usepackage[acronym]{glossaries}
+\makeglossaries
+\setacronymstyle{long-short}
+
+%=============== Format des titres ===============
+
+\makeatother
+\setlist{nosep}
+
+\titleformat{\chapter}{\normalfont\huge\bfseries}{\thechapter}{1em}{}
+\titlespacing*{\chapter}{0pt}{-10pt}{20pt}
+
+\titleformat{\section}[block]{\Large\bfseries}{\thesection}{0.8em}{}      
+\titlespacing*{\section}{0pt}{2ex plus .2ex}{1ex plus .1ex}               
+
+\titleformat{\subsection}[block]{\large\bfseries}{\thesubsection}{0.8em}{} 
+\titlespacing*{\subsection}{0pt}{1.5ex plus .2ex}{0.7ex plus .1ex}
+
+
+%=======================================
+%============ Page de garde ============
+%=======================================

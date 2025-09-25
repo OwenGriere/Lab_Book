@@ -18,3 +18,15 @@ Meanwhile the full installation is :
     sudo apt install -y texlive-full
 
 ## Using Guide
+
+You can use latex_generator .sh to rewrite a new report knowing that you can run 
+
+    chmod u+x latex_generator.sh
+    ./latex_generator.sh --help
+
+to understand how to use it.
+
+After to run your latex when it's created you can run
+
+    ./pathtoyourproject/build.sh
+
