@@ -97,11 +97,6 @@ APPENDIX_BLOCK=""
 % Contenu de l'annexe
 "
 
-# Placeholder figure (si ImageMagick dispo)
-if command -v convert >/dev/null 2>&1; then
-  convert -size 10x10 xc:white "$FIG/exemple.png" 2>/dev/null || true
-fi
-
 # --- Assemble rapport.tex
 BIBLIO_PRINT_BLOCK=""
 [[ $ADD_BIB -eq 1 ]] && BIBLIO_PRINT_BLOCK="\\printbibliography
@@ -128,11 +123,7 @@ $TOC_BLOCK
 % Votre texte ici.
 
 \\section{Méthodes}
-\\begin{figure}[h]
-  \\centering
-  \\includegraphics[width=0.6\\linewidth]{figures/exemple.png}
-  \\caption{Exemple de figure (remplacez par vos images).}
-\\end{figure}
+% Votre texte ici.
 
 \\section{Résultats}
 % Votre texte ici.
