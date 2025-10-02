@@ -73,6 +73,7 @@ fi
 
 TOC_BLOCK=""
 [[ $ADD_TOC -eq 1 ]] && TOC_BLOCK="\\tableofcontents
+\\pdfbookmark[section]{Sommaire}{toc}
 \\newpage
 "
 
@@ -115,20 +116,20 @@ cat > "$SRC/rapport.tex" <<TEX
 \\begin{document}
 
 $TITLE_PAGE_BLOCK
-\\maketitle
+
 
 $TOC_BLOCK
 
-\\section{Introduction}
+\\chapter{Introduction}
 % Votre texte ici.
 
-\\section{Méthodes}
+\\chapter{Méthodes}
 % Votre texte ici.
 
-\\section{Résultats}
+\\chapter{Résultats}
 % Votre texte ici.
 
-\\section{Discussion}
+\\chapter{Discussion}
 % Votre texte ici.
 
 $BIBLIO_PRINT_BLOCK

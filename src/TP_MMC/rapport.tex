@@ -1,0 +1,282 @@
+\documentclass[10pt,a4paper]{report}
+
+\input{../../help/preamble.base}
+
+\begin{document}
+
+
+\begin{titlepage}
+  \centering
+  {\Large \textbf{TP Méthode de Métropolis Monte-Carlo}}\par
+  \vspace{1cm}
+  {\large Sous-titre / sujet}\par
+  \vfill
+  {\large Auteur : Owen GRIERE}\par
+  {\large Date : \today}\par
+\end{titlepage}
+
+\cleardoublepage
+\pdfbookmark[section]{Sommaire}{toc} 
+\tableofcontents
+\newpage
+
+
+\chapter{Introduction}
+
+Ce TP a pour but de générer sur Python une méthode de Métropolis Monte Carlo sur un profil de potentiel dans un espace réduit appelé boite.
+
+\section{Les parametres}
+
+Voici les parametres a faire varier lors de l'execution du code :
+
+\begin{description}
+  \item[\texttt{L = 5}] \emph{Taille de la boîte.}
+  Le domaine de calcul est le carré $\Omega=[-L,L]\times[-L,L]$.
+  Les positions sont donc bornées par $-L \le x,y \le L$.
+
+  \item[\texttt{T = 10}] \emph{Température}
+  Contrôle la probabilité d'accepter un déplacement défavorable.
+
+  \item[\texttt{pas\_aleatoire = 3}] \emph{Amplitude de déplacement proposée}
+  À chaque itération, on tire un décalage $(\delta x,\delta y)$ dans l'intervalle
+  \[
+  \delta x,\, \delta y \in [-p_{\text{aléa}},\, p_{\text{aléa}}], \quad \text{où } p_{\text{aléa}}=\texttt{pas\_aleatoire}.
+  \]
+
+  \item[\texttt{pas = 50}] \emph{Nombre d'itérations.}
+  On effectue $N_{\text{pas}}=\texttt{pas}$ propositions/acceptations de déplacements (boucle Monte Carlo).
+
+  \item[\texttt{epsilon = $10^{-3}$}] \emph{Seuil de minima d'énergie}
+  On considère que l'on a atteint le fond d'un puits de potentiel lorsque la projection du gradient vérifie la condition
+  \[
+  \big|D_F\big| \;<\; \varepsilon,
+  \]
+  (Autrement dit, la pente locale en descente de gradient est proche de 0)
+
+  \item[\texttt{Discret = True}] \emph{Type d'espace}
+  \begin{itemize}
+    \item \textbf{True} : espace discret.
+    \item \textbf{False} : espace continu.
+  \end{itemize}
+
+  \item[\texttt{plotting = '2D'}] \emph{Mode de visualisation}
+  \begin{itemize}
+    \item \texttt{'2D'} : espace 2D dans le plan $(x,y)$, avec coloration suivant la valeur de $f$.
+    \item \texttt{'3D'} : surface $z=F(x,y)$ au-dessus du domaine $\Omega$.
+  \end{itemize}
+
+  \item[\texttt{GRADIENT = False}] \emph{Affichage optionnel du gradient projeté}
+  \begin{itemize}
+    \item \textbf{True} : en plus du profil d'energie, on affiche une carte de $D_F$ pour visualiser les zones de forte pente.
+    \item \textbf{False} : on n'affiche que la figure principale.
+  \end{itemize}
+
+  \item[\texttt{les tables \(W_i, X_i, Y_i\)}] \emph{Paramètres de la fonction de potentiel}
+  \begin{itemize}
+    \item Les couples $(X_i, Y_i)$ représentent les \textbf{positions des centres des puits de potentiel}. 
+    Chaque point correspond donc à une localisation spatiale où l’énergie est minimale.
+
+    \item Les coefficients $W_i$ jouent le rôle de \textbf{profondeur des puits}.  
+    Plus $W_i$ est grand, plus le puits associé est profond, ce qui correspond à une interaction énergétique plus marquée.  
+  \end{itemize}
+\end{description}
+
+\chapter{Explication du Code}
+
+Ici est présenté toutes les fonctions utilisé dans le code python sachant que le tout est articulé dans la fonction main() qui sera également
+explicitée.
+
+\section{La fonction de potentiel}
+
+Cette fonction a pour but de caluler la valeur de potentiel en chaque point de la grille (X, Y) définit par cette fonction :
+\[
+F(x,y) \;=\; - \sum_{i} W_i \, e^{\!\Big( - (X_i - x)^2 - (Y_i - y)^2 \Big)}
+\]
+Cette fonction permet d'obtenir un profil énergétique aléatoire.
+
+\section{Les fonctions intermédiaires}
+
+\subsection{La fonction \texttt{grad\_f}}
+Cette fonction sert à calculer le gradient en point de cette manière :
+\[
+\nabla F(x,y) =
+\begin{bmatrix}
+- \sum\limits_{i} W_i \, 2(X_i - x) \, e^{\!\big( -(X_i - x)^2 - (Y_i - y)^2 \big)} \\
+- \sum\limits_{i} W_i \, 2(Y_i - y) \, e^{\!\big( -(X_i - x)^2 - (Y_i - y)^2 \big)}
+\end{bmatrix}
+\]
+
+\noindent Ensuite, on calul son projeté sur la direction de \(-\nabla F\) pour obtenir un scalaire:
+
+\[
+D_F \;=\; \nabla F(x,y) \cdot \frac{-\nabla F(x,y)}{\|-\nabla F(x,y)\|}
+\;=\; - \| \nabla F(x,y) \|
+\]
+
+\noindent On obtient au final:  \(D_F \;=\; - \| \nabla F(x,y) \| \) 
+Ainsi on obtient que \(D_F\) est l’opposé de la norme du gradient de F.
+
+Les fonctions \texttt{grad\_grid} et \texttt{projected\_gradient\_field} permettent de faire la même chose mais sur une
+grille Numpy afin de pouvoir plot les valeur de la norme du gradient de F sur l'entiereté de la boite.
+
+\subsection{La fonction \texttt{verif\_deplacement}}
+
+Cette fonction a pour objectif de vérifier si à partir d'une position (x, y), un décalage de cette position de (dx, dy) est possible au
+sein de la boite. Si le déplacement est possible alors elle retournera True alors que dans le cas contraire False sera retourné.
+
+\subsection{La fonction \texttt{init\_decalage}}
+
+Cette fonction pour objectif de générer un vecteur de déplacement. Cette fonction prend en entrée un boolean 'puit', un pas aléatoire ainsi
+qu'un scalaire gradient. Le boolean puit a pour objectif de désigner a l'attribution aléatoire que la position de la conformation se trouve 
+dans un puit de potentiel. \\
+\noindent On effectue cette comparaison pour definir le fond d'un puit, donc un minima de potentiel.
+\[
+  |D_F| < \varepsilon 
+\]
+Quand cette condition est validé, on choisit un décalage comme si nous n'étions pas dans un puit, afin d'en sortir. 
+Alors que si nous touchons pas le fond du puit, le décalage définit par le pas aléatoire est multiplié par un facteur \(\frac{1}{e^{|D_F|}}\)
+pour toucher progressivement la fin du puit pour atteindre plus finement le minima de potentiel. 
+
+Ici l'objectif est d'introduire un terme qui va venir réduire la fenêtre d'un choix aléatoire d'un pas afin de rester au maximum dans le puit
+de potentiel et d'etre sur d'atteindre le plus possible le minima de celui-ci.
+
+\subsection{La fonction \texttt{vecteur\_deplacement}}
+
+Cette fonction effectue le déplacement qui a été vérifié au préalable.
+
+\section{La fonction de Métropolis Monte Carlo}
+
+Cette fonction est le coeur de l'algorithme de Metropolis Monte Carlo, elle est alors détaillé ci-dessous :
+
+\noindent Soit une position $(i,j)\in\mathbb{R}^2$ (correspondant a une conformation spécifique) et la fonction d'energie 
+$f:\mathbb{R}^2\to\mathbb{R}$. On propose un déplacement $(x_{\text{décal}},y_{\text{décal}})$ conduisant à la conformation candidate
+\[
+(i',j') \;=\; \big(i+x_{\text{décal}},\, j+y_{\text{décal}}\big),
+\]
+à condition qu'il soit admissible (\texttt{verif\_deplacement} donne True). On définit la variation d'énergie
+\[
+\Delta f \;=\; F(i',j') - F(i,j).
+\]
+La règle d'acceptation de Metropolis fonctionne de la manière suivante : 
+On accepte le candidat dans 2 cas différents et distincts :
+
+\begin{itemize}[label=--]
+  \item Si $\Delta f \le 0$ correspondant a une conformation nécessairement plus stable
+  \item Si en tirant $R \sim \mathbb{U}(0,1)$ le candidat vérifie $e^{-\Delta f/T} > R$ (acceptation probabiliste d'une dégradation de la stabilité)
+\end{itemize}
+où $T>0$ est la ``Température''. \\ 
+
+Puis, l'on met à jour l'état via
+\[
+(i,j)\leftarrow(i',j') \quad\text{(\texttt{vecteur\_deplacement})}.
+\]
+Sinon, on refuse le déplacement et on conserve l'état courant $(i,j)$. Dans le code fourni, cela correspond au test
+\[
+\big(F(i,j) > F(i',j')\big)\;\;\text{ou}\;\;\Big(\,F(i,j) \leq F(i',j') \;\text{et}\; e^{(F(i,j)-F(i',j'))/T} > R\,\Big),
+\]
+ce qui est exactement $e^{-\Delta F/T} > R$ lorsque $\Delta F>0$.
+
+
+\section{La fonction \texttt{main}}
+
+Cette fonction execute quand a elle la méthode de Metropolis Monte Carlo pour chaque pas choisit dans les parametres sachant quelle calule a 
+chaque itération la norme du gradient a chaque nouveau point afin de définir la présence d'un puit et de réduire le pas dans le cas d'un détection d'un puit.
+
+les variables \texttt{puit} et \texttt{flag\_puit} permettent comme une bascule de définir un changement d'etat de la présence d'un puit au niveau
+de la conformation actuelle, \texttt{origin\_puit} sert a récupérer la valeur du potentiel au niveau maximum du potentiel puit afin de verifier quand
+la conformation suivante en sort. J'utilise de manière arbitraire $\varepsilon$ pour définir ce critére de sortie d'un puit : \\ \\
+\(\big| F(\texttt{origin\_puit}) - F(\text{conformation actuelle}) \big| \;\leq\; \varepsilon\) \texttt{AND} \textit{ETAT = dans un puits}
+$\;\;\Longrightarrow\;\;$ \textit{ETAT = sortie du puits} \\
+
+\noindent la condition \(-\| \nabla F(x,y) \| < -0.2\) a été définit empiriquement en imprimant les moyenne et écart-type de \(-\| \nabla F(x,y) \|\)
+pour plusieurs simulation. Il n'est pas fin du tout et ne semble pas etre stringeant pour le moment.
+
+\newpage
+
+\section{Les fonctions de visualisation graphique}
+\subsection{La fonction \texttt{plot\_2D}}
+
+Cette fonction plot en 2D le profil énergétique ainsi que la trajectoire de la conformation suivant X et Y. Il est possible de plot également
+le gradient sur l'entiereté de la boite avec la trajectoire 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.63\textwidth]{2D_plot.png}
+  \caption{Visualisation 2D du profil énergétique avec la trajectoire obtenu grace a MMC pour 50 pas}
+  \label{fig:wrap}
+\end{figure}
+
+\subsection{La fonction \texttt{plot\_3D}}
+
+Cette fonction plot en 2D le profil énergétique ainsi que la trajectoire de la conformation suivant X, Y et du potentiel de la conformation.
+Il est possible de plot également le gradient sur l'entiereté de la boite avec la trajectoire
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{3D_plot.png}
+    \caption{Visualisation en 3D du profil énergétique avec la trajectoire obtenue grâce à MMC pour 50 pas}
+    \label{fig:3Dplot}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{3D_gradient.png}
+    \caption{Visualisation en 3D du gradient projeté avec la trajectoire obtenue grâce à MMC pour 50 pas}
+    \label{fig:3Dgrad}
+  \end{minipage}
+\end{figure}
+
+
+\chapter{Résultats}
+
+Dans cette section je vais présenter mes différents résultat atteint avec la méthode de Metropolis Monte Carlo.
+On à choisit dans cette Figure~\ref{fig:température_basse} \(\varepsilon = 10^{-3}\) ainsi que 200 itération avec une température égale à 2.
+L'objectif étant d'augmenter la température pour voir l'évolution de la méthode en fonction de celle-ci
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{200_2_2D.png}
+    \caption{Visualisation en 2D du profil énergétique avec la trajectoire obtenue grâce à MMC pour 200 pas}
+    \label{fig:3Dplot}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{200_2_3D.png}
+    \caption{Visualisation en 3D du profil énergétique avec la trajectoire obtenue grâce à MMC pour 200 pas}
+    \label{fig:température_basse}
+  \end{minipage}
+\end{figure}
+
+Désormais il s'agit d'augmenter uniquement la température et de voir comment la simulation augmente. J'ai utiliser la seed '42' afin de reproduire 
+le même profil énergétique afin de d'isoler l'impact de la température. Dans cette Figure~\ref{fig:température_haute}, la température a été fixé
+à 200. 
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{200_200_2D.png}
+    \caption{Visualisation en 2D du profil énergétique avec la trajectoire obtenue grâce à MMC pour 200 pas}
+    \label{fig:3Dplot}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{200_200_3D.png}
+    \caption{Visualisation en 3D du profil énergétique avec la trajectoire obtenue grâce à MMC pour 200 pas}
+    \label{fig:température_haute}
+  \end{minipage}
+\end{figure}
+
+On remarque que plus la température augmente plus il est compliqué pour la simulation d'atteindre les extremums d'énergie, ce qui relativement logique
+compte tenu du modèle d'exclusion du critère de Metropolis.
+
+\chapter{Discussion}
+
+
+
+
+
+
+\end{document}
