@@ -44,7 +44,7 @@ La méthode de expérimentale utilisé pour résoudre la structure est X-Ray ave
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.63\textwidth]{with_hist.png}
+  \includegraphics[width=0.55\textwidth]{with_hist.png}
   \caption{Visualisation de la protéine EA2 sur PyMol en révélant les Histidines}
   \label{fig:hist}
 \end{figure}
@@ -55,7 +55,7 @@ La méthode de expérimentale utilisé pour résoudre la structure est X-Ray ave
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.63\textwidth]{ea2.png}
+  \includegraphics[width=0.55\textwidth]{ea2.png}
   \caption{Surface possible d'interaction protéine-protéine}
   \label{fig:surface}
 \end{figure}
@@ -79,7 +79,7 @@ d’interaction avec une protéine ? }
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.63\textwidth]{hpr.png}
+  \includegraphics[width=0.55\textwidth]{hpr.png}
   \caption{Surface possible d'interaction protéine-protéine pour la protéine HPR, regroupant 30 conformations différentes}
   \label{fig:hpr}
 \end{figure}
@@ -131,7 +131,7 @@ Cette partie n'est pas faisable a cause du temps d'execution de la simulation
 6 Clusters on été généré par cette analyse voici leur energie associées : \\
 
 \begin{itemize}[label=o]
-  \item CLuster 1:
+  \item Cluster 1:
   \begin{itemize}[label=--]
     \item Van der Waals energy	-30.4 +/- 3.2
     \item Electrostatic energy	-604.5 +/- 41.4
@@ -183,11 +183,11 @@ Cette partie n'est pas faisable a cause du temps d'execution de la simulation
 
 \noindent \\ Pour chacun des Cluster on calcul:
 \[
-HADDOCK_score = 1,0 * Evdw + 0,2 * Eelec + 1,0 * Edesol + 0,1 * Eair
+HADDOCK_{score} = 1,0 * E_{vdw} + 0,2 * E_{elec} + 1,0 * E_{desol} + 0,1 * E_{air}
 \]
 
 
-le \(HADDOCK_score\) du Cluster 1 (meilleur classement) est de -163.9 +/- 9.3 tandis que le \(HADDOCK_score\) du Cluster 2,
+le \(HADDOCK_{score}\) du Cluster 1 (meilleur classement) est de -163.9 +/- 9.3 tandis que le \(HADDOCK_{score}\) du Cluster 2,
 donc le second mieux classé, est de -124.9 +/- 2.5. Ainsi, on peut en déduire que le meilleur cluster est significativement meilleur 
 que les autres clusters. 
 
@@ -196,7 +196,7 @@ que les autres clusters.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.63\textwidth]{allcluster.png}
+  \includegraphics[width=0.55\textwidth]{allcluster.png}
   \caption{Ensemble des cluster de cette interaction aligné sur le premier cluster}
   \label{fig:all}
 \end{figure}
@@ -205,7 +205,7 @@ Les différentes position semble assez similaire.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.63\textwidth]{interface.png}
+  \includegraphics[width=0.55\textwidth]{interface.png}
   \caption{Visualisation de l'interface entre EA2 et HPR avec les meilleurs conformation des 6 Clusters}
   \label{fig:interface}
 \end{figure}
@@ -215,9 +215,11 @@ dans ces conformations
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.63\textwidth]{cluster1.png}
+  \includegraphics[width=0.55\textwidth]{cluster1.png}
   \caption{Visualisation de l'interface entre EA2 et HPR avec uniquement le cluster 1}
   \label{fig:interface}
 \end{figure}
+
+Je pense qu'on trouve de  meilleurs résultats pour la conformation du Cluster 1.
 
 \end{document}
