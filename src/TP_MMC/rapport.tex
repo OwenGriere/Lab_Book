@@ -272,6 +272,34 @@ le même profil énergétique afin de d'isoler l'impact de la température. Dans
 On remarque que plus la température augmente plus il est compliqué pour la simulation d'atteindre les extremums d'énergie, ce qui est 
 relativement logique compte tenu du modèle d'exclusion du critère de Metropolis.
 
+\noindent On peut egalement augmenter le nombre de puits de notre profil énergétique comme vu ci-dessous, on remarque que sur cet exemple les puits les plus
+profonds sont bien repéré et atteint par la méthode MMC. (Ref : Figure~\ref{fig:20puits})
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{20puits_2D.png}
+    \caption{Visualisation en 2D du profil énergétique avec la trajectoire obtenue grâce à MMC pour 300 pas et 20 puits}
+    \label{fig:3Dplot}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{20puits.png}
+    \caption{Visualisation en 3D du profil énergétique avec la trajectoire obtenue grâce à MMC pour 300 pas et 20 puits}
+    \label{fig:20puits}
+  \end{minipage}
+\end{figure}
+
+Ensuite, s'interroge sur l'ecart entre le ground truth et notre MMC, pour comprendre cet écart on commence par choisir une conformation unique 
+du profil énergétique avec une SEED puis on répète l'expérience 1000 fois en récupérant l'ecart entre le ground truth et nos expériences pour
+finir par en calculer la moyenne et l'ecart-type.
+
+\noindent On trouve ceci : moyenne = -0.058 et ecart-type = 0.085
+
+\noindent Et voici un histogramme de la distribution de ces ecarts.
+
+
 \chapter{Discussion}
 
 
