@@ -1,0 +1,223 @@
+\documentclass[10pt,a4paper]{report}
+
+\input{../../help/preamble.base}
+
+\begin{document}
+
+
+\begin{titlepage}
+  \centering
+  {\Large \textbf{Rapport de TP : Haddock}}\par
+  \vspace{1cm}
+  {\large Simulation Haddock d'une interface Protéine-Protéine}\par
+  \vfill
+  {\large Auteur : Owen GRIERE}\par
+  {\large Date : \today}\par
+\end{titlepage}
+
+
+\tableofcontents
+\pdfbookmark[section]{Sommaire}{toc}
+\newpage
+
+
+
+
+
+
+
+\chapter{Inspections des deux protéines et de leurs structures résolues}
+
+\section{Inspection de la protéine EA2}
+
+\textbf{Quelle est la méthode expérimentale utilisée pour résoudre la structure et quelle
+est la résolution de cette structure ? Est-ce que la structure possède un groupement phosphate
+dans la structure ?}
+
+La méthode de expérimentale utilisé pour résoudre la structure est X-Ray avec 2.10 Angstrom de résolution 
+
+    Method: X-RAY DIFFRACTION
+    Resolution: 2.10 Å
+    R-Value Observed: 0.162 (Depositor) 
+
+\noindent En relevant les histidines on peut voir ceci:
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.63\textwidth]{with_hist.png}
+  \caption{Visualisation de la protéine EA2 sur PyMol en révélant les Histidines}
+  \label{fig:hist}
+\end{figure}
+
+\noindent De plus cette protéine ne présente pas de groupement phosphate.
+
+\textbf{Est-ce que la surface identifiée est continue ? Est-ce que cela peut former un patch d’interaction avec une protéine ?}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.63\textwidth]{ea2.png}
+  \caption{Surface possible d'interaction protéine-protéine}
+  \label{fig:surface}
+\end{figure}
+
+\noindent La surface semble continue est orienté, elle peut correspondre a une interface d'intéraction
+
+\section{Inspection de la protéine HPr}
+
+\textbf{Que peut-on remarquer lorsque la structure est affichée sur PyMol ?}
+
+\noindent On remarque que les feuillets Beta forme un surface qui peut etre une interface d'intération avec une autre macromolécule
+
+\textbf{est-ce que la surface identifiée est continue ? Est-ce que cela peut former un patch
+d’interaction avec une protéine ? }
+
+\noindent La surface d'intéraction est pour le coup complétement continue est peut servir de clé dans une intéraction serure-clé lors du docking de 2 macromolécules.
+
+\textbf{Que peut-on dire des conformations prises par les résidus identifiés par l’étude RMN, en rouge ?}
+
+\noindent On remarque que malgré 30 conformation différentes le site d'intéractions semble ne pas changer drastiquement par rapport a la géometrie de la protéine.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.63\textwidth]{hpr.png}
+  \caption{Surface possible d'interaction protéine-protéine pour la protéine HPR, regroupant 30 conformations différentes}
+  \label{fig:hpr}
+\end{figure}
+
+
+
+
+
+
+
+
+\chapter{Modification de la structure de EA2 avec phosphorylation}
+
+\textbf{Consultez la liste des acides aminés modifiés pris en charge. Quel est le nom de résidu approprié pour une phospho-histidine dans HADDOCK ?}
+
+\noindent Afin de Phosporiser une histidine nous utilisons la modifications de résidus par Haddock en utilisant la modificatin de résidus suivantes
+
+    NEP: NE phosphorylated HIS.
+    Atoms:
+    N,HN,CA,HA,CB,HB1,HB2,CG,ND1,HD1,CD2,HD2,CE1,HE1,NE2,P,O1P,O2P,O3P,C,O
+
+
+
+
+
+
+
+
+
+\chapter{Simulation de docking des protéines EA2 et HPr}
+
+Cette partie n'est pas faisable a cause du temps d'execution de la simulation
+
+\section{Soumission et validation des structures}
+
+\section{Définition des contraintes}
+
+\section{Vérification de l'état de protonation des histidines}
+
+\section{Soumission du calcul}
+
+
+
+
+
+
+\chapter{Analyse des résultats}
+
+6 Clusters on été généré par cette analyse voici leur energie associées : \\
+
+\begin{itemize}[label=o]
+  \item CLuster 1:
+  \begin{itemize}[label=--]
+    \item Van der Waals energy	-30.4 +/- 3.2
+    \item Electrostatic energy	-604.5 +/- 41.4
+    \item Desolvation energy	-14.4 +/- 1.1
+    \item Restraints violation energy	18.3 +/- 8.6
+  \end{itemize}
+
+  \item Cluster 2 :
+  \begin{itemize}[label=--]
+    \item Van der Waals energy	-34.0 +/- 3.1
+    \item Electrostatic energy	-385.9 +/- 18.9
+    \item Desolvation energy	-14.1 +/- 1.8
+    \item Restraints violation energy	16.5 +/- 10.4
+  \end{itemize}
+
+  \item Cluster 3 :
+  \begin{itemize}[label=--]
+    \item Van der Waals energy	-27.5 +/- 6.5
+    \item Electrostatic energy	-440.9 +/- 12.9
+    \item Desolvation energy	-11.8 +/- 2.3
+    \item Restraints violation energy	25.5 +/- 12.9
+  \end{itemize}
+
+  \item Cluster 4 :
+  \begin{itemize}[label=--]
+    \item Van der Waals energy	-20.1 +/- 4.5
+    \item Electrostatic energy	-420.9 +/- 45.9
+    \item Desolvation energy	-9.1 +/- 2.4
+    \item Restraints violation energy	48.6 +/- 43.7
+  \end{itemize}
+
+  \item Cluster 5 :
+  \begin{itemize}[label=--]
+    \item Van der Waals energy	-32.6 +/- 8.8
+    \item Electrostatic energy	-337.4 +/- 55.4
+    \item Desolvation energy	-9.7 +/- 3.9
+    \item Restraints violation energy	30.5 +/- 25.2
+  \end{itemize}
+
+  \item Cluster 6 :
+  \begin{itemize}[label=--]
+    \item Van der Waals energy	-14.5 +/- 4.4
+    \item Electrostatic energy	-361.4 +/- 20.0
+    \item Desolvation energy	-14.2 +/- 3.6
+    \item Restraints violation energy	49.3 +/- 28.5
+  \end{itemize}
+\end{itemize}
+
+
+\noindent \\ Pour chacun des Cluster on calcul:
+\[
+HADDOCK_score = 1,0 * Evdw + 0,2 * Eelec + 1,0 * Edesol + 0,1 * Eair
+\]
+
+
+le \(HADDOCK_score\) du Cluster 1 (meilleur classement) est de -163.9 +/- 9.3 tandis que le \(HADDOCK_score\) du Cluster 2,
+donc le second mieux classé, est de -124.9 +/- 2.5. Ainsi, on peut en déduire que le meilleur cluster est significativement meilleur 
+que les autres clusters. 
+
+\chapter{Visualisation et interprétation des résultats}
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.63\textwidth]{allcluster.png}
+  \caption{Ensemble des cluster de cette interaction aligné sur le premier cluster}
+  \label{fig:all}
+\end{figure}
+
+Les différentes position semble assez similaire.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.63\textwidth]{interface.png}
+  \caption{Visualisation de l'interface entre EA2 et HPR avec les meilleurs conformation des 6 Clusters}
+  \label{fig:interface}
+\end{figure}
+
+\noindent On remarque que l'on retrouve bien les résidus présent dans les surface d'intractions en contact les uns avec les autres 
+dans ces conformations
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.63\textwidth]{cluster1.png}
+  \caption{Visualisation de l'interface entre EA2 et HPR avec uniquement le cluster 1}
+  \label{fig:interface}
+\end{figure}
+
+\end{document}

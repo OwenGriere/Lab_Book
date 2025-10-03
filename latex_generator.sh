@@ -165,7 +165,6 @@ cleanup() {
 }
 
 printf "[BUILD]\n\tDirectoy=${SRCDIR}\n\tOutput_directory=${OUTDIR}\n\tJOBNAME=${JOBNAME}\n"
-cd "${SRCDIR}"
 
 # 1ère passe
 pdflatex -interaction=nonstopmode -halt-on-error -jobname="${JOBNAME}" "${MAIN}" >/dev/null
