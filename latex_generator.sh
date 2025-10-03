@@ -164,7 +164,7 @@ cleanup() {
       *.nav *.snm *.vrb *.xdv *.thm 2>/dev/null || true )
 }
 
-printf "[BUILD]\n\tDirectoy=${SRCDIR}\n\tOutput_directory=${OUTDIR}\n\tJOBNAME=${JOBNAME}\n"
+printf "[BUILD]\n\tDirectory=${SRCDIR}\n\tOutput_directory=${OUTDIR}\n\tJOBNAME=${JOBNAME}\n"
 
 # 1ère passe
 pdflatex -interaction=nonstopmode -halt-on-error -jobname="${JOBNAME}" "${MAIN}" >/dev/null
