@@ -7,13 +7,20 @@
 
 \begin{titlepage}
   \centering
-  {\Large \textbf{TP Méthode de Métropolis Monte-Carlo}}\par
-  \vspace{1cm}
-  {\large Sous-titre / sujet}\par
-  \vfill
-  {\large Auteur : Owen GRIERE}\par
-  {\large Date : \today}\par
+  \vspace*{\fill} 
+
+  {\fontsize{44}{52}\selectfont\bfseries
+  TP Méthode de Métropolis Monte-Carlo\par}
+  \vspace*{\fill}
+
+  \noindent\rule{\textwidth}{1pt}
+  \vspace{0.6em}
+  {\raggedright
+    \large Auteur : Owen GRIERE\par
+    \large Date : \today\par
+  }
 \end{titlepage}
+
 
 \cleardoublepage
 \pdfbookmark[section]{Sommaire}{toc} 
@@ -229,6 +236,8 @@ Il est possible de plot également le gradient sur l'entiereté de la boite avec
 
 \chapter{Résultats}
 
+\section{Résultats sur un profil énergétique généré par une unique SEED}
+
 Dans cette section je vais présenter mes différents résultat atteint avec la méthode de Metropolis Monte Carlo.
 On à choisit dans cette Figure~\ref{fig:température_basse} \(\varepsilon = 10^{-3}\) ainsi que 200 itération avec une température égale à 2.
 L'objectif étant d'augmenter la température pour voir l'évolution de la méthode en fonction de celle-ci
@@ -291,6 +300,9 @@ profonds sont bien repéré et atteint par la méthode MMC. (Ref : Figure~\ref{f
   \end{minipage}
 \end{figure}
 
+\newpage
+\section{1000 expériences de MMC avec le même profil énergétique}
+
 Ensuite, s'interroge sur l'ecart entre le ground truth et notre MMC, pour comprendre cet écart on commence par choisir une conformation unique 
 du profil énergétique avec une SEED puis on répète l'expérience 1000 fois en récupérant l'ecart entre le ground truth et nos expériences pour
 finir par en calculer la moyenne et l'ecart-type.
@@ -308,18 +320,31 @@ finir par en calculer la moyenne et l'ecart-type.
   \label{tab:exemple}
 \end{table}
 
-\noindent Et voici un histogramme de la distribution de ces ecarts.
+\noindent Voici un histogramme de la distribution de ces écarts (Figure~\ref{fig:hist_1000}). De plus, on observe la carte dans l'espace (X, Y)
+des conformations les plus stables trouvé par les 1000 expériences de MMC, on remarque que les zones de puits sont plus peuplé par les 
+points définis précédemment. On peut apercevoir cette réalité par densité (effet sur la couleur rouge plus vive des points du puits)
+(Figure~\ref{fig:minimal_1000}). \\
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.80\textwidth]{hist.png}
-  \caption{Histrogramme normalisé autour de [0;1], de la distribution des ecarts entre le ground truth et l'expérience}
-  \label{fig:histogramme}
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{hist_1000.png}
+    \caption{Histrogramme normalisé autour de [0;1], de la distribution des ecarts entre le ground truth et l'expérience}
+    \label{fig:hist_1000}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{min_1000.png}
+    \caption{Visualisation en 3D du profil énergétique avec la meilleure conformation obtenu par MMC pour 1000 expériences}
+    \label{fig:minimal_1000}
+  \end{minipage}
 \end{figure}
 
-\noindent De plus, sur ces 1000 expériences de Métropolis Monte Carlo nous testons la précision de la méthode en définissant un seuil pour lequel on considère que 
-la méthode a atteint la conformation la plus stable ce seuil est définit comme cela \(0{,}10 \cdot \mathrm{Min}_{\text{théorique}}\),
-le critère est donc \(|\Delta E_{Théorique-Expérience}| \leq 0{,}10 \cdot \mathrm{Min}_{\text{théorique}}\)
+
+\noindent De plus, sur ces 1000 expériences de Métropolis Monte Carlo nous testons la précision de la méthode en définissant 
+un seuil entre 0 et 1, correspondant à un pourcentage, pour lequel on considère que la méthode a atteint la conformation la plus stable.
+Le critère de validation est donc définit comme suit \(|\Delta E_{Théorique-Expérience}| \leq Seuil\)
 
 \begin{table}[h]
   \centering
@@ -337,11 +362,34 @@ le critère est donc \(|\Delta E_{Théorique-Expérience}| \leq 0{,}10 \cdot \ma
   \label{tab:exemple}
 \end{table}
 
+
+\newpage
+\section{10 000 expériences de MMC avec des profils énergétique différents}
+
+Cet histogramme pour 10 000 expériences de MMC avec des profils énergétique tous différents, montre un Pourcentage de réussite de 71 \% pour un seuil à 5 \%. 
+La distribution est plus nette et semble correspondre a une distribution de Boltzmann.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.80\textwidth]{hist.png}
+  \caption{Histrogramme normalisé autour de [0;1], de la distribution des ecarts entre le ground truth et 
+  l'expérience pour 10 000 expérience de MMC avec des profils énergétique tous différents}
+  \label{fig:hist}
+\end{figure}
+
 \chapter{Discussion}
 
+Les résultats de la MMC montrent que celle-ci a bien été implémenté et semble fonctionner correctement en s'approchant prés de la valeur
+minimal de potentiel correspondant a la conformation la plus stable. On peut voir aussi que cette méthode est capable de trouver la plupart
+des puits de potentiel en un seul passage si le nombre de pas choisit est suffisement grand. Le défaut ici est que la localisation des puits 
+de potentiel peut nous empecher de les croiser notament a cause des effets de bords qui empeche d'acceder au puits car trop pret d'un déplacement
+illégal. \\
 
+\noindent L'autre critique notable est l'efficacité des parametres implémentés qui ne sont pas prouver par isolation de ces mêmes paramètres. En effet,
+le scalaire de dimunition de l'espace de selection d'un nombre aléatoire. \\
 
-
-
+\noindent Pour finir, la réalisation d'une MMC est grandement dépendante des paramètres choisit au préalable, je pense que mes paramètres ne sont pas 
+encore assez finement choisit pour optimiser complètement la MMC même si les résulats semble ne pas être mauvais notamments sur les 10 000 avec des 
+profils énergétique différents.
 
 \end{document}
