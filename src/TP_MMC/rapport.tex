@@ -295,10 +295,47 @@ Ensuite, s'interroge sur l'ecart entre le ground truth et notre MMC, pour compre
 du profil énergétique avec une SEED puis on répète l'expérience 1000 fois en récupérant l'ecart entre le ground truth et nos expériences pour
 finir par en calculer la moyenne et l'ecart-type.
 
-\noindent On trouve ceci : moyenne = -0.058 et ecart-type = 0.085
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|}
+  \hline
+  Moyenne & Ecart-type \\
+  \hline
+  0.058 & 0.085 \\
+  \hline
+  \end{tabular}
+  \caption{Statistiques des ecarts entre le ground truth et l'expérience}
+  \label{tab:exemple}
+\end{table}
 
 \noindent Et voici un histogramme de la distribution de ces ecarts.
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.80\textwidth]{hist.png}
+  \caption{Histrogramme normalisé autour de [0;1], de la distribution des ecarts entre le ground truth et l'expérience}
+  \label{fig:histogramme}
+\end{figure}
+
+\noindent De plus, sur ces 1000 expériences de Métropolis Monte Carlo nous testons la précision de la méthode en définissant un seuil pour lequel on considère que 
+la méthode a atteint la conformation la plus stable ce seuil est définit comme cela \(0{,}10 \cdot \mathrm{Min}_{\text{théorique}}\),
+le critère est donc \(|\Delta E_{Théorique-Expérience}| \leq 0{,}10 \cdot \mathrm{Min}_{\text{théorique}}\)
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|c|}
+  \hline
+  Seuil & Vrai & Faux \\
+  \hline
+  5 \% &  65 \% & 35 \% \\
+  10 \% & 83 \% & 17 \% \\
+  20 \% & 94 \% & 6 \% \\
+  50 \% & 99 \% & 1 \% \\
+  \hline
+  \end{tabular}
+  \caption{Pourcentage d'expérience MMC réussites}
+  \label{tab:exemple}
+\end{table}
 
 \chapter{Discussion}
 
