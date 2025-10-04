@@ -278,8 +278,9 @@ le même profil énergétique afin de d'isoler l'impact de la température. Dans
   \end{minipage}
 \end{figure}
 
-On remarque que plus la température augmente plus il est compliqué pour la simulation d'atteindre les extremums d'énergie, ce qui est 
-relativement logique compte tenu du modèle d'exclusion du critère de Metropolis.
+On remarque que plus la température augmente plus il est facile pour la simulation d'atteindre les extremums d'énergie, ce qui est 
+relativement logique compte tenu du modèle d'exclusion du critère de Metropolis. Mais la température a aussi pour effet de garder la conformation
+au fond d'un puit de potentiel et de rendre compliqué la sortie d'un puit par l'acceptation d'une conformation plus instable.
 
 \noindent On peut egalement augmenter le nombre de puits de notre profil énergétique comme vu ci-dessous, on remarque que sur cet exemple les puits les plus
 profonds sont bien repéré et atteint par la méthode MMC. (Ref : Figure~\ref{fig:20puits})
