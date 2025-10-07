@@ -68,7 +68,7 @@ printf "\n[BUILD] Projet LaTeX en cours de création --- "
 # --- Blocs optionnels
 TITLE_PAGE_BLOCK=""
 if [[ $ADD_TITLE -eq 1 ]]; then
-  TITLE_PAGE_BLOCK=$'\n\\begin{titlepage}\n  \\centering\n  {\\Large \\textbf{Titre du Rapport}}\\par\n  \\vspace{1cm}\n  {\\large Sous-titre / sujet}\\par\n  \\vfill\n  {\\large Auteur : Prénom Nom}\\par\n  {\\large Date : \\today}\\par\n\\end{titlepage}\n'
+  TITLE_PAGE_BLOCK=$'\n\\begin{titlepage}\n  \\centering\n  {\\Large \\textbf{Titre du Rapport}}\\par\n  \\vspace{1cm}\n  {\\large Sous-titre / sujet}\\par\n  \\vfill\n  {\\large Auteur : OWen GRIERE}\\par\n  {\\large Date : \\today}\\par\n\\end{titlepage}\n'
 fi
 
 TOC_BLOCK=""
@@ -109,11 +109,23 @@ cat > "$SRC/rapport.tex" <<TEX
 
 \\input{../../help/preamble.base}
 
-\\title{Titre du Rapport}
-\\author{Prénom Nom}
-\\date{\\today}
-
 \\begin{document}
+
+  \\begin{center}
+    \\setength{\tabcolsep}{8pt} % espace horizontal entre logos
+    \\renewcommand{\arraystretch}{1.0} % hauteur des lignes
+    \\begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ccccccc@{}}
+      \\includegraphics[height=1.5cm]{logo1.png} &
+      \\includegraphics[height=1.5cm]{logo2.png} &
+      \\includegraphics[height=1.5cm]{logo3.png} &
+      \\includegraphics[height=1.5cm]{logo4.png} &
+      \\includegraphics[height=1.5cm]{logo5.png} &
+      \\includegraphics[height=1.5cm]{logo6.png} &
+      \\includegraphics[height=1.5cm]{logo7.png} \\
+    \\end{tabular*}
+  \\end{center}
+
+  \\vspace*{3cm}
 
 $TITLE_PAGE_BLOCK
 

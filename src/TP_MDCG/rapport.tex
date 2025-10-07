@@ -1,44 +1,154 @@
-\documentclass[10pt,a4paper]{report}
+\documentclass[12pt,a4paper]{report}
 
 \input{../../help/preamble.base}
-
-\title{Titre du Rapport}
-\author{Prénom Nom}
-\date{\today}
 
 \begin{document}
 
 
 \begin{titlepage}
+  % --- Bandeau de logos en haut de page ---
+  \begin{center}
+    \setlength{\tabcolsep}{8pt} % espace horizontal entre logos
+    \renewcommand{\arraystretch}{1.0} % hauteur des lignes
+    \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}ccccccc@{}}
+      \includegraphics[height=3.5cm]{logo_eidd.png} \\
+    \end{tabular*}
+  \end{center}
+
+  \vspace*{3cm} % espace après les logos
+
+  % --- Titre principal ---
   \centering
-  {\Large \textbf{Titre du Rapport}}\par
-  \vspace{1cm}
-  {\large Sous-titre / sujet}\par
-  \vfill
-  {\large Auteur : Prénom Nom}\par
-  {\large Date : \today}\par
+  {\fontsize{44}{52}\selectfont\bfseries
+  TP Modélisation MD Gros Grain\par}
+
+  \vspace*{\fill}
+
+  % --- Ligne et informations ---
+  \noindent\rule{\textwidth}{1pt}
+  \vspace{0.6em}
+  {\raggedright
+    \large Auteur : Owen GRIERE\par
+    \large Date : \today\par
+  }
+
 \end{titlepage}
 
-\maketitle
 
+\cleardoublepage
+\pdfbookmark[section]{Sommaire}{toc} 
 \tableofcontents
 \newpage
 
+% ====================================================================================
+% =================================== Introduction ===================================
+% ====================================================================================
+\chapter{Introduction}
 
-\section{Introduction}
-% Votre texte ici.
+\begin{multicols}{2}
+  La simulation MD est une méthode numérique permettant de suivre le mouvement de particules en résolvant les équations de Newton 
+  à partir de forces dérivées de potentiels d’interaction. Dans le cas d’une modélisation gros grain (coarse-grain), plusieurs atomes sont regroupés en 
+  une seule entité appelée « beads », afin de simplifier la description du système. Cette approche réduit considérablement le nombre de 
+  degrés de liberté et donc le coût computationnel. Elle permet ainsi d’accéder à des échelles de temps et d’espace plus grandes que celles atteignables par 
+  les simulations atomistiques classiques. Les interactions entre les billes sont modélisées par des potentiels effectifs, ajustés pour reproduire les propriétés 
+  physiques globales du système réel. Ce type de simulation est particulièrement utilisé pour étudier les macromoldécules biologiques comme les protéines où les 
+  détails atomiques ne sont pas systématiquement indispensables. La MD gros grain constitue donc un compromis entre réalisme structurel et efficacité numérique.
+  Dans notre cas nous étudions différentes conformation d'un ARN grâce à diverses structures crystalisées (PDB). L'objectif final étant de trouver la conformation 
+  la plus stable de l'ARN. Cette recherche dépendra du mapping (regroupement de groupes d'atomes en beads pour obtenir une simulation gros grain) que nous choisirons,
+  d'un champ de force spécifique a notre problème. Une fois les étapes précédentes accomplies nous utiliserons alors une methode de Monte Carlo pour explorer les diverses 
+  conformations jusqu'à obtenir la conformation la plus stable, donc la plus basse en énergie. 
+\end{multicols}
 
-\section{Méthodes}
-% Votre texte ici.
+\vspace{1em}
 
-\section{Résultats}
-% Votre texte ici.
+\begin{multicols}{2}
+  MD simulation is a numerical method for tracking particle motion by solving Newton's equations 
+  based on forces derived from interaction potentials. In coarse-grain modeling, several atoms are grouped together into 
+  a single entity called “beads” in order to simplify the description of the system. This approach significantly reduces the number of 
+  degrees of freedom and therefore the computational cost. It thus allows access to larger time and space scales than those achievable by 
+  classical atomistic simulations. The interactions between the beads are modeled by effective potentials, adjusted to reproduce the overall physical properties 
+  of the real system. This type of simulation is particularly used to study biological macromolecules such as proteins, where 
+  atomic details are not always essential. Coarse-grained MD therefore represents a compromise between structural realism and numerical efficiency.
+  In our case, we are studying different conformations of RNA using various crystallized structures (PDB). The ultimate goal is to find the 
+  most stable conformation of the RNA. This research will depend on the mapping (grouping of atoms into beads to obtain a coarse-grained simulation) that we choose,
+  and on a force field specific to our problem. Once the previous steps have been completed, we will then use a Monte Carlo method to explore the various 
+  conformations until we obtain the most stable conformation, the one with the lowest energy. 
+\end{multicols}
 
-\section{Discussion}
-% Votre texte ici.
+% ====================================================================================
+% ============================ Explication des Fonctions =============================
+% ====================================================================================
+\chapter{Fonctions}
+
+\subsection{\texttt{get\_arguments}}
+
+Cette fonction a pour objectif de récupérer l'argument '--mapping' qui peut etre placé dans ligne d'execution du code afin de réalisé le mapping de tous les 
+fichiers PDB d'un dossier. Si '--mapping' n'est pas présent alors le mapping ne sera pas éffectué. Le nouveau mapping remplace le précédent.
+
+\section{Fonctions utilisées pour le Mapping}
+
+\subsection{\texttt{check\_purine}}
+
+Cette fonction sert a vérifier si la sous-structure observé dans l'ARN correspond a une purine ou a une pirimidine. En effet, le mapping implique des atomes des bases
+azotées ainsi il est important de faire la différences entre les deux.
+
+\subsection{\texttt{centre\_de\_masse}}
+
+Cette fonction à pour objectif de récupérer les coordonnées d'un groupe d'atomes que l'on veut regrouper en une seule bead afin de déterminer la position de cette 
+bead en calculant le centre de masse du groupe d'atomes.
+
+\subsection{\texttt{mapping\_RIA}}
 
 
+\subsection{\texttt{formatage}}
+\subsection{\texttt{MAPPING}}
+
+\section{Fonctions utilisées pour le Champ de force}
+
+\subsection{\texttt{distance}}
+\subsection{\texttt{E\_Lennard\_Jones}}
+\subsection{\texttt{E\_elastique}}
+\subsection{\texttt{compute\_energy}}
+
+\section{Fonctions pour la méthode de Monte Carlo}
+
+\subsection{\texttt{MMC}}
+
+\section{Fonctions de plot et d'analyse diverses}
+
+\subsection{\texttt{analyse\_T\_pas}}
+
+\subsection{\texttt{analyse\_profil}}
+% ====================================================================================
+% ==================================== Le Mapping ====================================
+% ====================================================================================
+
+\chapter{Le Mapping}
+
+En effet, un ARN se constitue d'une chaine 
+très similaire à l'ADN. L'ADN est une double hélice constituée de deux chaines en opposition composé chacune d'un phosphore, d'un deoxiribose et d'une base azotée
 
 
+% ====================================================================================
+% ========================== Explication du champ de force ===========================
+% ====================================================================================
+
+\chapter{Le champ de Force}
+
+\section{Les différents potentiels}
+
+\section{Les paramètres associés}
+
+% ====================================================================================
+% ============================ Explication des Résultats =============================
+% ====================================================================================
+\chapter{Résultats}
+
+
+% ====================================================================================
+% =================================== Discussions ====================================
+% ====================================================================================
+
+\chapter{Discussion}
 
 \end{document}
