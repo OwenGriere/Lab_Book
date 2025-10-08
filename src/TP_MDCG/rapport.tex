@@ -87,9 +87,11 @@ fichiers PDB d'un dossier. Si '--mapping' n'est pas présent alors le mapping ne
 
 \section{Fonctions utilisées pour le Mapping}
 
+Dans cette section, nous allons introduire les fonctions permettant d'effectuer le mapping en gros grain des fichiers PDB qui sont à l'origine au niveau atomistiques.
+
 \subsection{\texttt{check\_purine}}
 
-Cette fonction sert a vérifier si la sous-structure observé dans l'ARN correspond a une purine ou a une pirimidine. En effet, le mapping implique des atomes des bases
+Cette fonction sert a vérifier si la sous-structure observé dans l'ARN correspond a une purine ou a une pyrimidine. En effet, le mapping implique des atomes des bases
 azotées ainsi il est important de faire la différences entre les deux.
 
 \subsection{\texttt{centre\_de\_masse}}
@@ -99,36 +101,202 @@ bead en calculant le centre de masse du groupe d'atomes.
 
 \subsection{\texttt{mapping\_RIA}}
 
+Cette fonction sert à effectuer le “mapping gros grain” d’un nucléotide d’ARN en regroupant ses atomes en 5 “beads” représentatives. Elle identifie d’abord le type 
+de base (purine ou pyrimidine), puis renomme et réindexe certains atomes clés. Trois atomes de la base seront renommé en Ni1, Ni2 et Ni3.
+Le groupement phosphate (Pho) reste inchangé simplement renommé, et les atomes constituant le sucre qui lie la base azotée aux groupement phosphate est renommé en 
+ribose (RIB). Les coordonnées du ribose sont remplacées par son centre de masse, calculé à partir des atomes du cycle sucre.
+Chaque “bead” reçoit un identifiant unique dépendant du rang du nucléotide (sT).
+Enfin, la fonction renvoie une nouvelle liste d’atomes représentatifs (4 ou 5 selon la présence du phosphate) correspondant au modèle gros grain de ce nucléotide.
 
 \subsection{\texttt{formatage}}
+
+Cette fonction sert a formater le resultat du mapping dans une structure de fichier de type PDB ou chaque element n'est pas séparé par une tabulation mais doit 
+impérativement se situer dans un interval de colonnes.
+
 \subsection{\texttt{MAPPING}}
+
+Cette fonction réalise le mapping en parcourant tout le fichier PDB, et en executant les fonctions précédentes en itérant sur les nucléotides afin de réecrire un 
+fichier de mapping pour chaque fichier PDB ouvert.
 
 \section{Fonctions utilisées pour le Champ de force}
 
+Dans cette section nous allons décrire les fonctions qui composent la construction du champ de force ainsi que le calcul de l'énergie libre de chaque conformation.
+
 \subsection{\texttt{distance}}
+
+Cette fonction calcul la distance euclidienne entre deux atomes i et j en trois dimensions.
+
+\[
+r_{ij} = \sqrt{(x_i - x_j)^2 + (y_i - y_j)^2 + (z_i - z_j)^2}
+\]
+
+\noindent
+où :
+\begin{itemize}
+  \item $x_i, y_i, z_i$ sont les \textbf{coordonnées cartésiennes} de l’atome $i$,
+  \item $x_j, y_j, z_j$ sont celles de l’atome $j$,
+  \item $r_{ij}$ représente la \textbf{distance euclidienne} entre les deux atomes dans l’espace tridimensionnel.
+\end{itemize}
+
 \subsection{\texttt{E\_Lennard\_Jones}}
+
+\begin{wrapfigure}[4]{l}{0.3\textwidth}
+  \centering
+  \includegraphics[width=0.30\textwidth]{lennard-jones.png}
+  \caption{Potentiel de Lennard-Jones entre deux atomes ou beads non liés}
+  \label{fig:L-J}
+\end{wrapfigure}
+
+\noindent \\ \\ Cette fonction calcule le potentiel de Lennard-Jones entre deux atomes non reliés par le squelette de la manières suivante :
+
+\[
+E_{\mathrm{LJ}}(i,j) = 4 \, \varepsilon_{ij} 
+\left[
+\left( \frac{\sigma_{ij}}{r_{ij}} \right)^{12}
+- 
+\left( \frac{\sigma_{ij}}{r_{ij}} \right)^{6}
+\right]
+\]
+
+\vspace{6em}
+
+où :
+\begin{itemize}
+  \item $\varepsilon_{ij} = \sqrt{\varepsilon_i \, \varepsilon_j}$ est la \textbf{profondeur du puits de potentiel}, représentant l’intensité de l’interaction attractive,
+  \item $\sigma_{ij} = \tfrac{1}{2} (\sigma_i + \sigma_j)$ est la \textbf{distance caractéristique} à laquelle le potentiel est nul,
+  \item $r_{ij}$ est la \textbf{distance} entre les atomes $i$ et $j$,
+  \item le terme $\left( \tfrac{\sigma_{ij}}{r_{ij}} \right)^{12}$ modélise la \textbf{répulsion} à courte portée (chevauchement électronique),
+  \item tandis que $\left( \tfrac{\sigma_{ij}}{r_{ij}} \right)^{6}$ décrit l’\textbf{attraction de van der Waals} à longue portée.
+\end{itemize}
+\newpage
+
 \subsection{\texttt{E\_elastique}}
+
+\begin{wrapfigure}{l}{0.3\textwidth}
+  \centering
+  \includegraphics[width=0.30\textwidth]{courbe-elast.png}
+  \caption{Potentiel élastique entre deux atomes ou beads chimiquement liés}
+  \label{fig:L-J}
+\end{wrapfigure}
+
+\noindent \\ Cette fonction calcule le potentiel de Lennard-Jones entre deux atomes reliés par le squelette de la manières suivante :
+
+\[
+E_{\text{élastique}}(i, j) = \frac{1}{2} \, k_{ij} \, (r_{ij} - r_{0,ij})^2
+\]
+
+où :
+\begin{itemize}
+  \item $k_{ij}$ est la \textbf{constante de raideur} associée à la paire d'atomes $(i,j)$, obtenue à partir de la table $K_{\mathrm{EL}}$,
+  \item $r_{0,ij}$ est la \textbf{distance d’équilibre} entre les deux atomes, issue de la table $R0_{\mathrm{EL}}$,
+  \item $(r_{ij} - r_{0,ij})$ représente l’\textbf{élongation} du lien,
+  \item le facteur $\tfrac{1}{2}$ correspond à la \textbf{forme harmonique} de l’énergie selon la loi de Hooke.
+\end{itemize}
+
+\subsection{\texttt{E\_electrostatic}}
+
+Cette fonction calcule le potentiel electrostatique entre deux atomes non reliés par le squelette de la manière suivante :
+
+\[
+E_{\mathrm{elec}}(i,j) = \frac{1}{4\pi \varepsilon_0 \varepsilon_r} 
+\cdot \frac{q_i \, q_j}{r_{ij}}
+\]
+
+où :
+\begin{itemize}
+  \item $q_i$ et $q_j$ sont les \textbf{charges électriques} des atomes $i$ et $j$,
+  \item $r_{ij}$ est la \textbf{distance} séparant les deux atomes,
+  \item $\varepsilon_0$ est la \textbf{perméabilité du vide},
+  \item $\varepsilon_r$ est la \textbf{constante diélectrique relative} du milieu,
+  \item $\dfrac{1}{4\pi \varepsilon_0 \varepsilon_r}$ est le \textbf{facteur de Coulomb}, qui module l’intensité de l’interaction selon le milieu considéré.
+\end{itemize}
+
+
 \subsection{\texttt{compute\_energy}}
+
+Cette fonction calcule l’énergie libre d’une conformation moléculaire à partir d’un fichier d’entrée (au format type PDB). 
+Elle commence par lire toutes les lignes du fichier et extrait uniquement celles correspondant aux atomes (`ATOM`), qu’elle stocke dans une liste. 
+Ensuite, elle parcourt toutes les paires d’atomes pour évaluer leurs interactions dans une double boucle sans redondance. 
+Si les deux atomes appartiennent à la même sous-structure et appartiennent au squelette (grâce la liste `bonds`), 
+ou s’il s’agit de deux groupements phosphates voisins le long de la chaîne, la fonction calcule une énergie élastique. 
+Dans tous les autres cas, elle évalue le potentiel electrostatique ainsi que l’interaction de type Lennard-Jones, représentant les forces de van der Waals 
+entre beads non liés. La somme de toutes ces contributions fournit l’énergie libre U du système.
+
 
 \section{Fonctions pour la méthode de Monte Carlo}
 
 \subsection{\texttt{MMC}}
 
+Comme vu dans le précédent TP cette fonction a simplement pour objectif de parcourir les différentes conformations de l'ARN qui se trouve être les différents fichiers
+PDB. Cette fonction utilise l'algorithme de Monte Carlo pour etre plus efficace et trouver la conformation la plus stable.
+
 \section{Fonctions de plot et d'analyse diverses}
 
 \subsection{\texttt{analyse\_T\_pas}}
 
+Cette fonction sert a plot une heatmap de la performance de la méthode de Monte Carlo en fonction de diverses valeur de Température et de nombre de pas, a chaque 
+itérations nous réalisons un nombre choisit d'expériences. Dans le cas de la Figure~\ref{fig:no_infuence_T}, nous avons réalisé 1000 expériences de Monte Carlo pour chacune des valeurs 
+de Température et de nombre de pas.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.90\textwidth]{no_influence_T.png}
+  \caption{Heatmap montrant la performance de la MMC pour différentes valeur de Température et de nombre de pas par MMC, le nombre d'expérience 
+  a été fixé a 1000 pour pouvoir récupérer des statistiques plus fiables}
+  \label{fig:no_infuence_T}
+\end{figure}
+
 \subsection{\texttt{analyse\_profil}}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.80\textwidth]{profil_energy.png}
+  \caption{Paysage energétique de toutes conformations disponibles de notre ARN (avec Plotly)}
+  \label{fig:profil_energy}
+\end{figure}
+
+Cette fonction permet de voir comment est distribuer l'energie libre de chacune des conformations a travers un graphique intéractif Plotly où tout les fichiers 
+sont dans le plan \(P=(X, Y)\) et l'energie associé aux conformations en Z.
+Dans la Figure~\ref{fig:profil_energy} on a du mal a distinguer pour quel fichier est associé une telle energie mais nous pouvons observer le paysage global de 
+l'energie libre.
+
+\section{Fonctionnement global}
+
+Pour articuler tout ces fonctions, j'utilise un main qui va executer le mapping (si besoin), calculer l'energie libre de chacune des structures et les placer 
+dans un dictionnaire qui a associe une structure a son énergie libre totale. Ensuite, celui-ci execute la méthode de Monte Carlo pour trouver la meilleur conformation 
+pas à pas. Enfin j'effectue l'analyse que je désire en appelant la fonction souhaité.
+
 % ====================================================================================
 % ==================================== Le Mapping ====================================
 % ====================================================================================
 
 \chapter{Le Mapping}
 
-En effet, un ARN se constitue d'une chaine 
-très similaire à l'ADN. L'ADN est une double hélice constituée de deux chaines en opposition composé chacune d'un phosphore, d'un deoxiribose et d'une base azotée
+Un ARN se constitue d'une chaine très similaire à l'ADN. L'ADN est une double hélice constituée de deux chaines en opposition composé chacune d'un phosphore, 
+d'un deoxiribose et d'une base azotée tandis que l'ARN est constitué d'un ribose complet. 
+Donc notre ARN est une chaine de nucléotide que l'on peut réduire dans une modélisation gros grain grâce au fait que l'ARN est un schéma répétitif.
 
+Je choisis comme mapping le modèle XIA qui propose de conserver le groupe phosphate tel quel comme maillon de la chaine, le cycle sucre est remplacé par une seule bead
+la base azotée est remplacé par 3 beads formant un triangle
 
+L'objectif du mapping de la base azotée est de conserver la forme de la base azotée qui est systématiquement plane. La géométrie du triangle permet de conserver, même 
+en utilisant des beads, la structure plane de la base azotée.
+
+Ainsi, j'utilise des listes pour récupérer les atomes de chaque structure du nucléotide :
+
+\begin{description}
+  \item[Ribose] \emph{cycle sucre transformé en une bead}
+  Les atomes récupéré sont : O3' C3' HO2' O2' C2' C1' O4' C4' C5' O5' H05'
+  \item[Pho] \emph{groupe phosphate transformé en une bead}
+  \item[base azotée de type purine] \emph{trois atomes sont conservés}
+  les atomes récupéré sont : 
+  \item[base azotée de type pyrimidine] \emph{trois atomes sont conservés}
+  les atomes récupéré sont : 
+\end{description}
+
+\noindent Je fais la différences entre les purines et pyrimidines dans mon mapping car elles n'ont pas la même structure et donc pas les mêmes propriétés méchanistiques.
+
+\noindent La purine 
 % ====================================================================================
 % ========================== Explication du champ de force ===========================
 % ====================================================================================
