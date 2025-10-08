@@ -261,7 +261,13 @@ sont dans le plan \(P=(X, Y)\) et l'energie associé aux conformations en Z.
 Dans la Figure~\ref{fig:profil_energy} on a du mal a distinguer pour quel fichier est associé une telle energie mais nous pouvons observer le paysage global de 
 l'energie libre.
 
-\section{Fonctionnement global}
+\section{Fonctions pour le bottom-up}
+
+Cette fonction sert a partir des fichier mapper et trouver le r0 en calculantcla médiane de chacune des liaisons pour chaque fichier
+C'est le role de la fonction \texttt{bottom\_up} de creer un dictionnaire qui accumule toute les distances entre les liaisons ensute la fonction
+\texttt{median} calcul la mediane de chacune des liaisons du dictionnaire concatené par fichier (action executé dans le main)
+
+\section{Fonctionnement global (\texttt{main})}
 
 Pour articuler tout ces fonctions, j'utilise un main qui va executer le mapping (si besoin), calculer l'energie libre de chacune des structures et les placer 
 dans un dictionnaire qui a associe une structure a son énergie libre totale. Ensuite, celui-ci execute la méthode de Monte Carlo pour trouver la meilleur conformation 
@@ -353,7 +359,6 @@ le mapping.
 % ========================== Explication du champ de force ===========================
 % ====================================================================================
 
-
 \chapter{Le champ de Force}
 
 \noindent Tout d'abord, pour le champ de force nous utiliserons deux termes d'energie correspondant a des intéractions entre deux bead non liés chimiquement et un terme 
@@ -444,7 +449,7 @@ où \(i\) et \(j\) sont des atomes.
 
 \section{Les paramètres associés}
 
-Les parametres sont placés dans un fichier JSON a coté. Ce qui permet de modifier les paramètres sans toucher au coeur du programme. Voici les paramètres qui composent
+Les paramètres sont placés dans un fichier JSON a coté. Ce qui permet de modifier les paramètres sans toucher au coeur du programme. Voici les paramètres qui composent
 le champ de force : 
 
 \begin{description}
@@ -454,11 +459,9 @@ le champ de force :
   
   \item[\textbf{Potentiel de Lennard–Jones}] 
   $\epsilon = 0.15$--$0.25~\mathrm{kcal \cdot mol^{-1}}$, 
-  $\sigma = 3.5$--$4.5~\mathrm{\AA}$, 
-  avec un rayon de coupure $r_{\mathrm{cut}} = 2.5\sigma$.
+  $\sigma = 3.5$--$4.5~\mathrm{\AA}$.
   
   \item[\textbf{Potentiel électrostatique}] 
-  Traité implicitement ; l’effet du solvant est inclus dans les paramètres de Lennard–Jones.
 
 \end{description}
 
@@ -467,6 +470,12 @@ le champ de force :
 % ====================================================================================
 \chapter{Résultats}
 
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.90\textwidth]{energie_profil.png}
+  \caption{Profil energétique calculer par notre champ de force sur tout les conformations PDB}
+  \label{fig:energieTrue}
+\end{figure}
 
 % ====================================================================================
 % =================================== Discussions ====================================
