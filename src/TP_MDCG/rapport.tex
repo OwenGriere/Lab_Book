@@ -276,30 +276,74 @@ Un ARN se constitue d'une chaine très similaire à l'ADN. L'ADN est une double 
 d'un deoxiribose et d'une base azotée tandis que l'ARN est constitué d'un ribose complet. 
 Donc notre ARN est une chaine de nucléotide que l'on peut réduire dans une modélisation gros grain grâce au fait que l'ARN est un schéma répétitif.
 
-Je choisis comme mapping le modèle XIA qui propose de conserver le groupe phosphate tel quel comme maillon de la chaine, le cycle sucre est remplacé par une seule bead
+\noindent Je choisis comme mapping le modèle XIA qui propose de conserver le groupe phosphate tel quel comme maillon de la chaine, le cycle sucre est remplacé par une seule bead
 la base azotée est remplacé par 3 beads formant un triangle
 
-L'objectif du mapping de la base azotée est de conserver la forme de la base azotée qui est systématiquement plane. La géométrie du triangle permet de conserver, même 
-en utilisant des beads, la structure plane de la base azotée.
-
-Ainsi, j'utilise des listes pour récupérer les atomes de chaque structure du nucléotide :
+\noindent L'objectif du mapping de la base azotée est de conserver la forme de la base azotée qui est systématiquement plane. La géométrie du triangle permet de conserver, même 
+en utilisant des beads, la structure plane de la base azotée. Le mapping que j'utilise est le suivant : \\
 
 \begin{description}
-  \item[Ribose] \emph{cycle sucre transformé en une bead}
-  Les atomes récupéré sont : O3' C3' HO2' O2' C2' C1' O4' C4' C5' O5' H05'
-  \item[Pho] \emph{groupe phosphate transformé en une bead}
-  \item[base azotée de type purine] \emph{trois atomes sont conservés}
-  les atomes récupéré sont : 
-  \item[base azotée de type pyrimidine] \emph{trois atomes sont conservés}
-  les atomes récupéré sont : 
+  \item[- Ribose] \emph{cycle sucre transformé en une bead} 
+  \item[- Pho] \emph{groupe phosphate transformé en une bead}
+  \item[- Base azotée de type purine] \emph{trois atomes sont conservés}  
+  \item[- Base azotée de type pyrimidine] \emph{trois atomes sont conservés}
 \end{description}
+
+\noindent \\ Ainsi, j'utilise des listes pour récupérer les atomes de chaque structure du nucléotide : \\ Les atomes récupéré pour le cycle sucre 
+sont : O3' C3' HO2' O2' C2' C1' O4' C4' C5' O5' H05'
 
 \noindent Je fais la différences entre les purines et pyrimidines dans mon mapping car elles n'ont pas la même structure et donc pas les mêmes propriétés méchanistiques.
 
-\noindent La purine 
+\noindent La purine est composé de deux cycle contrairement a la pyrimidine qui n'en possède qu'un.
+Tout d'abord nous allons regarder le mapping pour une pyrimidine grace au logiciel PyMol. Pour une base azotée de ce type les atomes récupéré sont : N9, C2 et C6
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{pyrimidine.png}
+    \caption{Visualisation en 3D d'une pyrimidine au sein d'un nucléotide}
+    \label{fig:pyrimidine}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{pyrimidine_mapping.png}
+    \caption{Visualisation en 3D d'une pyrimidine au sein d'un nucléotide où les atomes conservés pour le mapping sont modélisé en sphères magenta}
+    \label{fig:pyrimidine-mapped}
+  \end{minipage}
+\end{figure}
+
+\noindent \\ Ensuite, nous allons regarder le mapping d'une purine grace au logiciel PyMol. Pour une base azotée de ce type les atomes récupéré sont : N1, N3 et C5
+
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{purines.png}
+    \caption{Visualisation en 3D d'une purine au sein d'un nucléotide}
+    \label{fig:purine}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{purine_mapping.png}
+    \caption{Visualisation en 3D d'une purine au sein d'un nucléotide où les atomes conservés pour le mapping sont modélisé en sphères jaunes}
+    \label{fig:purine-mapped}
+  \end{minipage}
+\end{figure}
+
+\noindent Le mapping complet est visible dans la Figure~\ref{fig:mapping}. Dans cette figure, on peut voir 
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.80\textwidth]{mapping_cartoon.png}
+  \caption{Mapping complet de l'ARN ou les bead sont visibles sur une vue 'cartoon' de l'ARN depuis PyMol}
+  \label{fig:mapping}
+\end{figure}
+
 % ====================================================================================
 % ========================== Explication du champ de force ===========================
 % ====================================================================================
+
 
 \chapter{Le champ de Force}
 
