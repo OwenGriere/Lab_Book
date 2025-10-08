@@ -51,7 +51,7 @@
   une seule entité appelée « beads », afin de simplifier la description du système. Cette approche réduit considérablement le nombre de 
   degrés de liberté et donc le coût computationnel. Elle permet ainsi d’accéder à des échelles de temps et d’espace plus grandes que celles atteignables par 
   les simulations atomistiques classiques. Les interactions entre les billes sont modélisées par des potentiels effectifs, ajustés pour reproduire les propriétés 
-  physiques globales du système réel. Ce type de simulation est particulièrement utilisé pour étudier les macromoldécules biologiques comme les protéines où les 
+  physiques globales du système réel. Ce type de simulation est particulièrement utilisé pour étudier les macromolécules biologiques comme les protéines où les 
   détails atomiques ne sont pas systématiquement indispensables. La MD gros grain constitue donc un compromis entre réalisme structurel et efficacité numérique.
   Dans notre cas nous étudions différentes conformation d'un ARN grâce à diverses structures crystalisées (PDB). L'objectif final étant de trouver la conformation 
   la plus stable de l'ARN. Cette recherche dépendra du mapping (regroupement de groupes d'atomes en beads pour obtenir une simulation gros grain) que nous choisirons,
@@ -119,6 +119,7 @@ Cette fonction réalise le mapping en parcourant tout le fichier PDB, et en exec
 fichier de mapping pour chaque fichier PDB ouvert.
 
 \section{Fonctions utilisées pour le Champ de force}
+\label{sec:fonctions-champ-force}
 
 Dans cette section nous allons décrire les fonctions qui composent la construction du champ de force ainsi que le calcul de l'énergie libre de chaque conformation.
 
@@ -176,7 +177,7 @@ où :
   \centering
   \includegraphics[width=0.30\textwidth]{courbe-elast.png}
   \caption{Potentiel élastique entre deux atomes ou beads chimiquement liés}
-  \label{fig:L-J}
+  \label{fig:elastique}
 \end{wrapfigure}
 
 \noindent \\ Cette fonction calcule le potentiel de Lennard-Jones entre deux atomes reliés par le squelette de la manières suivante :
@@ -271,16 +272,22 @@ pas à pas. Enfin j'effectue l'analyse que je désire en appelant la fonction so
 % ====================================================================================
 
 \chapter{Le Mapping}
-
+\label{sec:Mapping}
 Un ARN se constitue d'une chaine très similaire à l'ADN. L'ADN est une double hélice constituée de deux chaines en opposition composé chacune d'un phosphore, 
 d'un deoxiribose et d'une base azotée tandis que l'ARN est constitué d'un ribose complet. 
-Donc notre ARN est une chaine de nucléotide que l'on peut réduire dans une modélisation gros grain grâce au fait que l'ARN est un schéma répétitif.
 
-\noindent Je choisis comme mapping le modèle XIA qui propose de conserver le groupe phosphate tel quel comme maillon de la chaine, le cycle sucre est remplacé par une seule bead
-la base azotée est remplacé par 3 beads formant un triangle
+\begin{wrapfigure}{r}{0.20\textwidth}
+  \centering
+  \includegraphics[width=0.20\textwidth]{XIA.png}
+  \caption{Modèle XIA pour les simulations gros grain}
+  \label{fig:XIA}
+\end{wrapfigure}
 
-\noindent L'objectif du mapping de la base azotée est de conserver la forme de la base azotée qui est systématiquement plane. La géométrie du triangle permet de conserver, même 
-en utilisant des beads, la structure plane de la base azotée. Le mapping que j'utilise est le suivant : \\
+\noindent Donc, notre ARN est une chaine de nucléotide que l'on peut réduire dans une modélisation gros grain.
+Je choisis alors le modèle XIA, visible dans la Figure~\ref{fig:XIA} qui propose de conserver le groupe phosphate comme maillon de la chaine, le cycle 
+sucre est remplacé par une seule bead. La base azotée est remplacé par 3 beads formant un triangle. L'objectif du mapping de la base azotée est de conserver sa forme 
+qui est systématiquement plane. La géométrie du triangle permet de conserver la structure plane de la base azotée. 
+Le mapping que j'utilise est le suivant : \\
 
 \begin{description}
   \item[- Ribose] \emph{cycle sucre transformé en une bead} 
@@ -289,13 +296,11 @@ en utilisant des beads, la structure plane de la base azotée. Le mapping que j'
   \item[- Base azotée de type pyrimidine] \emph{trois atomes sont conservés}
 \end{description}
 
-\noindent \\ Ainsi, j'utilise des listes pour récupérer les atomes de chaque structure du nucléotide : \\ Les atomes récupéré pour le cycle sucre 
+\noindent \\ Ainsi, j'utilise des listes pour récupérer les atomes de chaque structure du nucléotide. Les atomes récupéré pour le cycle sucre 
 sont : O3' C3' HO2' O2' C2' C1' O4' C4' C5' O5' H05'
-
-\noindent Je fais la différences entre les purines et pyrimidines dans mon mapping car elles n'ont pas la même structure et donc pas les mêmes propriétés méchanistiques.
-
-\noindent La purine est composé de deux cycle contrairement a la pyrimidine qui n'en possède qu'un.
-Tout d'abord nous allons regarder le mapping pour une pyrimidine grace au logiciel PyMol. Pour une base azotée de ce type les atomes récupéré sont : N9, C2 et C6
+Je fais la différences entre les purines et pyrimidines dans mon mapping car elles n'ont pas la même structure et donc pas les mêmes propriétés méchanistiques.
+La purine est composé de deux cycle contrairement a la pyrimidine qui n'en possède qu'un.
+Tout d'abord nous allons regarder le mapping pour une pyrimidine grace au logiciel PyMol. Pour une base azotée de ce type les atomes récupéré sont : N1, N3 et C5.
 
 \begin{figure}[H]
   \centering
@@ -313,7 +318,7 @@ Tout d'abord nous allons regarder le mapping pour une pyrimidine grace au logici
   \end{minipage}
 \end{figure}
 
-\noindent \\ Ensuite, nous allons regarder le mapping d'une purine grace au logiciel PyMol. Pour une base azotée de ce type les atomes récupéré sont : N1, N3 et C5
+\noindent \\ Ensuite, nous allons regarder le mapping d'une purine grace au logiciel PyMol. Pour une base azotée de ce type les atomes récupéré sont : N9, C2 et C6.
 
 \begin{figure}[H]
   \centering
@@ -331,7 +336,8 @@ Tout d'abord nous allons regarder le mapping pour une pyrimidine grace au logici
   \end{minipage}
 \end{figure}
 
-\noindent Le mapping complet est visible dans la Figure~\ref{fig:mapping}. Dans cette figure, on peut voir 
+\noindent Le mapping complet est visible dans la Figure~\ref{fig:mapping}. Dans cette figure, on peut voir la forme de l'ARN d'origine en cartoon quand les sphères représentent
+le mapping.
 
 \begin{figure}[H]
   \centering
@@ -340,6 +346,9 @@ Tout d'abord nous allons regarder le mapping pour une pyrimidine grace au logici
   \label{fig:mapping}
 \end{figure}
 
+\noindent J'ai décidé de ce mapping car c'est celui, selon moi, qui propose la vision la plus réaliste de la macromolécule et des degrés de liberté du système biologique
+, tout en étant en gros grain et relativement facile a mettre en place.
+
 % ====================================================================================
 % ========================== Explication du champ de force ===========================
 % ====================================================================================
@@ -347,9 +356,111 @@ Tout d'abord nous allons regarder le mapping pour une pyrimidine grace au logici
 
 \chapter{Le champ de Force}
 
+\noindent Tout d'abord, pour le champ de force nous utiliserons deux termes d'energie correspondant a des intéractions entre deux bead non liés chimiquement et un terme 
+de liaisons chimiques.\\
+
+\textcolor{RoyalBlue}{• Terme de non-liaison chimique}
+\hspace{2em}
+\textcolor{BrickRed}{• Terme de liaison chimique}
+
+\noindent \\ Les termes sont les suivant et la somme de chacun deux représente l'energie libre de la conformation étudié.
+
+\begin{itemize}[leftmargin=1.2cm, itemsep=3pt]
+  \item[\textcolor{RoyalBlue}{\Large$\bullet$}] Potentiel de Lennard-Jones
+  \item[\textcolor{RoyalBlue}{\Large$\bullet$}] Potentiel Électrostatique
+  \item[\textcolor{BrickRed}{\Large$\bullet$}] Potentiel Élastique
+\end{itemize}
+
 \section{Les différents potentiels}
 
+Comme on l'a vu dans la Section~\ref{sec:fonctions-champ-force}, voici la formulation mathématique du champ de force appliqué au système :
+
+\[
+E_{\mathrm{total}}
+=
+\textcolor{RoyalBlue}{
+\Bigg[
+}
+  \sum_{i=1}^{N}
+  \sum_{j>i}^{N}
+  E_{\mathrm{LJ}}(i,j)
+  +
+  \sum_{i=1}^{N}
+  \sum_{j>i}^{N}
+  E_{\mathrm{élec}}(i,j)
+\textcolor{RoyalBlue}{
+\Bigg]_{\mathrm{non\ liés}}
+}
++
+\textcolor{BrickRed}{
+\Bigg[
+}
+  \sum_{i=1}^{N}
+  \sum_{j>i}^{N}
+  E_{\mathrm{élastique}}(i,j)
+\textcolor{BrickRed}{
+\Bigg]_{\mathrm{liés}}
+}
+\]
+
+
+
+\[
+\Leftrightarrow
+E_{\mathrm{total}}
+=
+\textcolor{RoyalBlue}{
+\Bigg[
+}
+  \sum_{i=1}^{N}
+  \sum_{j>i}^{N}
+  4 \, \varepsilon_{ij}
+  \left(
+    \left( \frac{\sigma_{ij}}{r_{ij}} \right)^{12}
+    -
+    \left( \frac{\sigma_{ij}}{r_{ij}} \right)^{6}
+  \right)
+  +
+  \sum_{i=1}^{N}
+  \sum_{j>i}^{N}
+  \frac{1}{4\pi \varepsilon_0 \varepsilon_r}
+  \frac{q_i \, q_j}{r_{ij}}
+\textcolor{RoyalBlue}{
+\Bigg]_{\mathrm{non\ liés}}
+}
++
+\textcolor{BrickRed}{
+\Bigg[
+}
+  \sum_{i=1}^{N}
+  \sum_{j>i}^{N}
+  \frac{1}{2} \, k_{ij} \, (r_{ij} - r_{0,ij})^2
+\textcolor{BrickRed}{
+\Bigg]_{\mathrm{liés}}
+}
+\]
+
+où \(i\) et \(j\) sont des atomes.
+
 \section{Les paramètres associés}
+
+Les parametres sont placés dans un fichier JSON a coté. Ce qui permet de modifier les paramètres sans toucher au coeur du programme. Voici les paramètres qui composent
+le champ de force : 
+
+\begin{description}
+  \item[\textbf{Potentiel élastique}] 
+  $K_{\mathrm{EL}} = 50$--$100~\mathrm{kcal \cdot mol^{-1} \cdot \AA^{-2}}$, 
+  $R_{0} = 1.4$--$1.6~\mathrm{\AA}$ selon les liaisons (Ni–Ni, Ni–RIB, RIB–Pho).
+  
+  \item[\textbf{Potentiel de Lennard–Jones}] 
+  $\epsilon = 0.15$--$0.25~\mathrm{kcal \cdot mol^{-1}}$, 
+  $\sigma = 3.5$--$4.5~\mathrm{\AA}$, 
+  avec un rayon de coupure $r_{\mathrm{cut}} = 2.5\sigma$.
+  
+  \item[\textbf{Potentiel électrostatique}] 
+  Traité implicitement ; l’effet du solvant est inclus dans les paramètres de Lennard–Jones.
+
+\end{description}
 
 % ====================================================================================
 % ============================ Explication des Résultats =============================
