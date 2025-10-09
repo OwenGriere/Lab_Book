@@ -261,10 +261,10 @@ sont dans le plan \(P=(X, Y)\) et l'energie associé aux conformations en Z.
 Dans la Figure~\ref{fig:profil_energy} on a du mal a distinguer pour quel fichier est associé une telle energie mais nous pouvons observer le paysage global de 
 l'energie libre.
 
-\section{Fonctions pour le bottom-up}
+\section{Fonctions pour le paramètres \(R_0\)}
 
-Cette fonction sert a partir des fichier mapper et trouver le r0 en calculantcla médiane de chacune des liaisons pour chaque fichier
-C'est le role de la fonction \texttt{bottom\_up} de creer un dictionnaire qui accumule toute les distances entre les liaisons ensute la fonction
+Cette fonction sert a partir des fichier mapper et trouver une approximation du r0 en calculant la médiane de chacune des liaisons pour chaque fichier
+C'est le role de la fonction \texttt{find\_parameter} de creer un dictionnaire qui accumule toute les distances entre les liaisons ensute la fonction
 \texttt{median} calcul la mediane de chacune des liaisons du dictionnaire concatené par fichier (action executé dans le main)
 
 \section{Fonctionnement global (\texttt{main})}
@@ -470,6 +470,9 @@ le champ de force :
 % ====================================================================================
 \chapter{Résultats}
 
+Pour commencer on peut prêter attention au profil energétique de nos conformation. La Figure~\ref{fig:energieTrue} montre dans le plan (X, Y) les différentes conformations
+de notre ARN, l'energie associé à ces conformations se trouve dans la dimension Z ensemble les trois dimensions vont créer la surface correspondant au profil energétique.
+
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.90\textwidth]{energie_profil.png}
@@ -477,8 +480,54 @@ le champ de force :
   \label{fig:energieTrue}
 \end{figure}
 
+Cette figure montre que certaines conformation en particulier sont très stables. Les voici dans ce tableau :
+
+\begin{table}[h]
+  \centering
+  \begin{tabular}{|c|c|}
+  \hline
+  Conformation & Energie libre associée \\
+  \hline
+  32 & 10944 \\
+  201 & 11010 \\
+  21 & 12873 \\
+  44 & 14395 \\
+  56 & 16002 \\
+  236 & 16734 \\
+  \hline
+  \end{tabular}
+  \caption{Tableau des meilleurs conformations de l'ARN et de leur énergie libre associées}
+  \label{tab:exemple}
+\end{table}
+
+Ainsi pour ce champ de force et ce mapping nous allons lancé une méthode de Monte Carlo pour voir comment trouver la meilleure conformation en fonction 
+de la Température et du nombre de pas dans chacune des expériences de Monte Carlo.
+
+Pour ce faire on va généré une heatmap contenant les resultats des 1000 expériences de Monte Carlo pour chaque tuple (Température, nombre de pas)
+le nombre réel contenue dans chacune des cases de la heatmap correspond a la fréquence de réussite de l'expérience de Monte Carlo. Sachant qu'une expérience 
+réussite correspond a une tentative qui s'est soldé par la trouvaille de la meilleur conformation.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.90\textwidth]{resultatMMC.png}
+  \caption{Heatmap des resultats des expériences de Monte Carlo pour des Températures et nombre de pas donnés}
+  \label{fig:energieTrue}
+\end{figure}
+
+Premièrement, cette figure montre que la Température n'a aucun impact sur la fréquence de réussite de l'expérience. De plus, on remarque qu'en augmentant le 
+nombre de pas la fréquence augmente drastiquement ce qui est parfaitement logique mais qui indique que l'algorithme fonctionne.
+
+\noindent Ensuite, le fait que l'expérience de Monte Carlo ne fonctionne pas avec la température est normal car pour cela il aurait fallu générer une grille des conformations
+et pas a pas chercher les puits de potentiel. Le problème ici est que nous ne pouvons pas mieux réduire nos conformations en un quadrilatère orthonormés que en passant par
+le rectangle 5x53 ce qui rend la recherche moins complexe de plus les puis sont souvent définis par 1 ou 3 confoamtions maximum ce qui n'aide pas du tout a faire de la recherche
+par Monte Carlo autrement que par le hasard.
+En effet, c'est actuellement comme cela que fonctionne mon 'Monte Carlo', il est entièrement basé sur le hasard a cause de la fonction choice.
+
+\noindent \\ Peut-être qu'il possible de rendre la méthode de monte carlo plus réaliste en générant une grille des conformations et de definir une boite autour du premier élement cette boite plus
+petite que le rectangle 5x53 
+
 % ====================================================================================
-% =================================== Discussions ====================================
+% =================================== Discussion =====================================
 % ====================================================================================
 
 \chapter{Discussion}
