@@ -524,7 +524,9 @@ par Monte Carlo autrement que par le hasard.
 En effet, c'est actuellement comme cela que fonctionne mon 'Monte Carlo', il est entièrement basé sur le hasard a cause de la fonction choice.
 
 \noindent \\ Peut-être qu'il possible de rendre la méthode de monte carlo plus réaliste en générant une grille des conformations et de definir une boite autour du premier élement cette boite plus
-petite que le rectangle 5x53 
+petite que le rectangle 5x53. C'est pour cela que j'ai en plus développé les deux fonctions \texttt{box} qui définit une boite 1x10 autour d'un indice central
+et \texttt{analyse\_T\_pas\_improved} pour exectuer l'expérience de Monte Carlo de manière plus fonctionnelle mais sans amélioration. Ces améliorations pourront être d'intégrer
+un scalaire en fonction du gradient pour augmenter ou diminuer la taille de la boite.
 
 % ====================================================================================
 % =================================== Discussion =====================================
