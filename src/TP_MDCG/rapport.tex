@@ -454,15 +454,15 @@ le champ de force :
 
 \begin{description}
   \item[\textbf{Potentiel élastique}] 
-  $K_{\mathrm{EL}} = 50$--$100~\mathrm{kcal \cdot mol^{-1} \cdot \AA^{-2}}$, 
-  $R_{0} = 1.4$--$1.6~\mathrm{\AA}$ selon les liaisons (Ni–Ni, Ni–RIB, RIB–Pho).
+  $K_{\mathrm{EL}} = 80$--$100~\mathrm{kcal \cdot mol^{-1} \cdot \AA^{-2}}$, pour simuler le fait que la base azotée est plus stable élastiquement que les liaisons entre chaque groupes (Pho, RIB et Ni)
+  $R_{0} = 1.4$--$1.6~\mathrm{\AA}$, selon les liaisons (Ni–Ni, Ni–RIB, RIB–Pho), trouver géométriequement via le mapping.
   
   \item[\textbf{Potentiel de Lennard–Jones}] 
-  $\epsilon = 0.15$--$0.25~\mathrm{kcal \cdot mol^{-1}}$, 
-  $\sigma = 3.5$--$4.5~\mathrm{\AA}$.
+  $\epsilon = 0.7$--$1.0~\mathrm{kcal \cdot mol^{-1}}$, plus l'atome est lourd plus il va être attractif et donc plus $\epsilon$ sera grand
+  $\sigma = 2.0$--$4.5~\mathrm{\AA}$, le rayon d'effet $\sigma$ a pour but de générer le champ electrostatique de la bead
   
   \item[\textbf{Potentiel électrostatique}] 
-
+  $Q$ represente les charges positives ou négatives des beads et ici seuls le groupe phosphate est chargé négativement, le sucre est neutre et en gros grain la base azotée est neutre également.
 \end{description}
 
 % ====================================================================================
@@ -574,5 +574,12 @@ de pas mais avec une MMC fonctionnelle.
   \caption{Heatmap des resultats des expériences de Monte Carlo pour des Températures et nombre de pas donnés sur l'ensemble des puits}
   \label{fig:energieTrue}
 \end{figure}
+
+On remarque donc qu'il est bien plus facile de trouver la meilleur conformation que toute les conformations stables dont la meilleure. mais qu'il est possible d'atteindre un 
+résultat satisfaisant en augmentant suffisament la température ainsi que le nombre de pas.
+
+Pour conclure, la meilleur conformation de modèle gros grain dans ce champ de potentiel spécifique est la structure n°32. La MMC n'est pas évidente a mettre en place et le profil
+énergétique en dents de scie de la modélisation ainsi que le nombre trop faibles de différentes structures n'aide pas au déplacement correcte de la MMC au sein de l'espace artificiel 
+des conformations.
 
 \end{document}
