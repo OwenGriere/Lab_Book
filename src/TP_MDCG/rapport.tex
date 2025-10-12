@@ -273,6 +273,8 @@ Pour articuler tout ces fonctions, j'utilise un main qui va executer le mapping 
 dans un dictionnaire qui a associe une structure a son énergie libre totale. Ensuite, celui-ci execute la méthode de Monte Carlo pour trouver la meilleur conformation 
 pas à pas. Enfin j'effectue l'analyse que je désire en appelant la fonction souhaité.
 
+\noindent On peut alors a la fin du main, dans le if final, choisir quel analyse nous voulons réaliser et avec quel paramètres. 
+
 % ====================================================================================
 % ==================================== Le Mapping ====================================
 % ====================================================================================
@@ -453,15 +455,15 @@ Les paramètres sont placés dans un fichier JSON a coté. Ce qui permet de modi
 le champ de force : 
 
 \begin{description}
-  \item[\textbf{Potentiel élastique}] 
+  \item[\textbf{Potentiel élastique : }] 
   $K_{\mathrm{EL}} = 80$--$100~\mathrm{kcal \cdot mol^{-1} \cdot \AA^{-2}}$, pour simuler le fait que la base azotée est plus stable élastiquement que les liaisons entre chaque groupes (Pho, RIB et Ni)
   $R_{0} = 1.4$--$1.6~\mathrm{\AA}$, selon les liaisons (Ni–Ni, Ni–RIB, RIB–Pho), trouver géométriequement via le mapping.
   
-  \item[\textbf{Potentiel de Lennard–Jones}] 
+  \item[\textbf{Potentiel de Lennard–Jones : }] 
   $\epsilon = 0.7$--$1.0~\mathrm{kcal \cdot mol^{-1}}$, plus l'atome est lourd plus il va être attractif et donc plus $\epsilon$ sera grand
   $\sigma = 2.0$--$4.5~\mathrm{\AA}$, le rayon d'effet $\sigma$ a pour but de générer le champ electrostatique de la bead
   
-  \item[\textbf{Potentiel électrostatique}] 
+  \item[\textbf{Potentiel électrostatique : }] 
   $Q$ represente les charges positives ou négatives des beads et ici seuls le groupe phosphate est chargé négativement, le sucre est neutre et en gros grain la base azotée est neutre également.
 \end{description}
 
