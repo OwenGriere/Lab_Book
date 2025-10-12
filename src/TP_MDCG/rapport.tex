@@ -273,7 +273,7 @@ Pour articuler tout ces fonctions, j'utilise un main qui va executer le mapping 
 dans un dictionnaire qui a associe une structure a son énergie libre totale. Ensuite, celui-ci execute la méthode de Monte Carlo pour trouver la meilleur conformation 
 pas à pas. Enfin j'effectue l'analyse que je désire en appelant la fonction souhaité.
 
-\noindent On peut alors a la fin du main, dans le if final, choisir quel analyse nous voulons réaliser et avec quel paramètres. 
+\noindent \\ On peut alors a la fin du main, dans le \texttt{if} final, choisir quel analyse nous voulons réaliser et avec quel paramètres. 
 
 % ====================================================================================
 % ==================================== Le Mapping ====================================
@@ -452,7 +452,7 @@ où \(i\) et \(j\) sont des atomes.
 \section{Les paramètres associés}
 
 Les paramètres sont placés dans un fichier JSON a coté. Ce qui permet de modifier les paramètres sans toucher au coeur du programme. Voici les paramètres qui composent
-le champ de force : 
+le champ de force : \\
 
 \begin{description}
   \item[\textbf{Potentiel élastique : }] 
@@ -558,29 +558,30 @@ consitue souvent 1 ou 3 conformations)
   \end{minipage}
 \end{figure}
 
-\noindent Ensuite on peut voir l'impact du nombre de pas grace à la heatmap ci-dessous qui montre de nouveau l'impact de la température et du nombre 
+\noindent Ensuite, on peut voir l'impact du nombre de pas grace à la heatmap ci-dessous [\ref{fig:heatmap_T}] qui montre de nouveau l'impact de la température et du nombre 
 de pas mais avec une MMC fonctionnelle.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.90\textwidth]{MMC_heatmap.png}
   \caption{Heatmap des resultats des expériences de Monte Carlo pour des Températures et nombre de pas donnés}
-  \label{fig:energieTrue}
+  \label{fig:heatmap_T}
 \end{figure}
 
-\noindent Pour finir, on regarde la même chose mais la condition d'acceptation d'une expérience de MMC est de trouver l'ensemble des puits au nombre de 6.
+\noindent Pour finir, on regarde la même chose mais la condition d'acceptation d'une expérience de MMC est de trouver l'ensemble des puits au nombre de 6. la figure ci-dessous
+[\ref{fig:heatmap_puits}] nous montre les résultats de cette expérience.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.90\textwidth]{puits_heatmap.png}
   \caption{Heatmap des resultats des expériences de Monte Carlo pour des Températures et nombre de pas donnés sur l'ensemble des puits}
-  \label{fig:energieTrue}
+  \label{fig:heatmap_puits}
 \end{figure}
 
-On remarque donc qu'il est bien plus facile de trouver la meilleur conformation que toute les conformations stables dont la meilleure. mais qu'il est possible d'atteindre un 
+\noindent On remarque donc qu'il est bien plus facile de trouver la meilleur conformation que toute les conformations stables dont la meilleure. mais qu'il est possible d'atteindre un 
 résultat satisfaisant en augmentant suffisament la température ainsi que le nombre de pas.
 
-Pour conclure, la meilleur conformation de modèle gros grain dans ce champ de potentiel spécifique est la structure n°32. La MMC n'est pas évidente a mettre en place et le profil
+\noindent \\ \\ Pour conclure, la meilleur conformation de modèle gros grain dans ce champ de potentiel spécifique est la structure n°32. La MMC n'est pas évidente a mettre en place et le profil
 énergétique en dents de scie de la modélisation ainsi que le nombre trop faibles de différentes structures n'aide pas au déplacement correcte de la MMC au sein de l'espace artificiel 
 des conformations.
 
