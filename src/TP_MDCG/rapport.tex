@@ -524,14 +524,55 @@ par Monte Carlo autrement que par le hasard.
 En effet, c'est actuellement comme cela que fonctionne mon 'Monte Carlo', il est entièrement basé sur le hasard a cause de la fonction choice.
 
 \noindent \\ Peut-être qu'il possible de rendre la méthode de monte carlo plus réaliste en générant une grille des conformations et de definir une boite autour du premier élement cette boite plus
-petite que le rectangle 5x53. C'est pour cela que j'ai en plus développé les deux fonctions \texttt{box} qui définit une boite 1x10 autour d'un indice central
+petite que le rectangle 5x53. C'est pour cela que j'ai en plus développé les deux fonctions \texttt{box} qui définit une boite 3x5 autour d'un indice central
 et \texttt{analyse\_T\_pas\_improved} pour exectuer l'expérience de Monte Carlo de manière plus fonctionnelle mais sans amélioration. Ces améliorations pourront être d'intégrer
 un scalaire en fonction du gradient pour augmenter ou diminuer la taille de la boite.
 
-% ====================================================================================
-% =================================== Discussion =====================================
-% ====================================================================================
+\noindent la fonction \texttt{exp\_MMC} me permet d'afficher une trajectoire de MMC pour sur un profil d'energie pour regarder doucement l'impact de la température sur le MMC 
+et le comportement général de la MMC. Dans cette figure on voit que premierement la MMC va automatquement accéder a une conformation moins stable et rester bloqué dans un puit quel qu'il soit.
+Secondement, on voit qu'il peut sortir de conformation stable vers une conformation instable uniquement si la différence d'energie entre les deux n'est pas extreme. Et enfin, 
+pour une température assez haute nous pouvons voir que la MMC trouve la plupart des puits en arrivant a sortir de chacun deux apres avoir atteint le fond (ce qui n'est pas difficile car celui
+consitue souvent 1 ou 3 conformations)
 
-\chapter{Discussion}
+\begin{figure}[H]
+  \centering
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{MMC_10.png}
+    \caption{Visualisation en 3D du profil énergétique et de la MMC pour une température de 10 et 150 pas}
+    \label{fig:MMC_10}
+  \end{minipage}\hfill
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{MMC_500.png}
+    \caption{Visualisation en 3D du profil énergétique et de la MMC pour une température de 500 et 150 pas}
+    \label{fig:MMC_500}
+  \end{minipage}
+  \begin{minipage}{0.32\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{MMC_20000.png}
+    \caption{Visualisation en 3D du profil énergétique et de la MMC pour une température de 20 000 et 150 pas}
+    \label{fig:MMC_20000}
+  \end{minipage}
+\end{figure}
+
+\noindent Ensuite on peut voir l'impact du nombre de pas grace à la heatmap ci-dessous qui montre de nouveau l'impact de la température et du nombre 
+de pas mais avec une MMC fonctionnelle.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.90\textwidth]{MMC_heatmap.png}
+  \caption{Heatmap des resultats des expériences de Monte Carlo pour des Températures et nombre de pas donnés}
+  \label{fig:energieTrue}
+\end{figure}
+
+\noindent Pour finir, on regarde la même chose mais la condition d'acceptation d'une expérience de MMC est de trouver l'ensemble des puits au nombre de 6.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.90\textwidth]{puits_heatmap.png}
+  \caption{Heatmap des resultats des expériences de Monte Carlo pour des Températures et nombre de pas donnés sur l'ensemble des puits}
+  \label{fig:energieTrue}
+\end{figure}
 
 \end{document}
